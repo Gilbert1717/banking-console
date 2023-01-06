@@ -1,6 +1,4 @@
 ﻿using System;
-// using System.Data;
-// using Microsoft.Data.SqlClient;
 using s3665887_a1;
 
 class Program
