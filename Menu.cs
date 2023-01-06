@@ -15,6 +15,36 @@ public static class Menu
 
     Enter an option:
     """;
+    
+    private static void menuSwitch(string s)
+    {
+        switch (s)
+        {
+            case "1":
+                Menu.deposit();
+                break;
+            case "2":
+                Menu.withdraw();
+                break;
+            case "3":
+                Menu.transfer();
+                break;
+            case "4":
+                Menu.myStatement();
+                break;
+            case "5":
+                Console.WriteLine("Successfully Logout");
+                break;
+            case "6":
+                Console.WriteLine("Thanks for using the system6");
+                break;
+            default:
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nInvalid input\n");
+                Console.ResetColor();
+                break;
+        }
+    }
 
     // private static bool loginAuth(string userName, string userPassword)
     // {
@@ -58,5 +88,16 @@ public static class Menu
     public static void myStatement()
     {
         Console.WriteLine("myStatement");
+    }
+
+    public static void useMenu()
+    {
+        string? menuSelect = null;
+        do
+        {
+            Menu.displayMenu();
+            menuSelect = Console.ReadLine();
+            Menu.menuSwitch(menuSelect);
+        } while (menuSelect != "5" && menuSelect != "6");
     }
 }
