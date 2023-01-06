@@ -2,11 +2,11 @@ namespace s3665887_a1.DTOs;
 
 public class Transaction
 {
-    private int Amount { get; init; }
+    private double Amount { get; init; }
     private string? Comment { get; init; }
-    private string TransactionTimeUtc { get; init; }
+    public DateTime TransactionTimeUtc { get; init; }
 
-    public Transaction(int amount, string? comment, string transactionTimeUtc)
+    public Transaction(double amount, string? comment, DateTime transactionTimeUtc)
     {
         Amount = amount;
         Comment = comment;

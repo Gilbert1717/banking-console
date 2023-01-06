@@ -5,7 +5,7 @@ public class Account
     private int AccountNumber { get; init; }
     private string AccountType { get; init; }
     private string CustomerID { get; set; }
-    private List<Transaction> Transactions { get; }
+    public List<Transaction> Transactions { get; }
 
     public Account(int accountNumber, string accountType, string customerId, List<Transaction> transactions)
     {

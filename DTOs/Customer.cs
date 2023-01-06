@@ -7,7 +7,7 @@ public class Customer
     private string Address { get; set; }
     private string City { get; set; }
     private string PostCode { get; set; }
-    private List<Account> Accounts { get; }
+    public List<Account> Accounts { get; init; }
     private Dictionary<string, string> Login { get; }
 
     public Customer(
