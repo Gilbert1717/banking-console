@@ -1,10 +1,9 @@
-﻿using System;
-using s3665887_a1;
+﻿namespace s3665887_a1;
 
 class Program
 {
-    static void Main()
+    public static void Main()
     {
-        Menu.useMenu();
+        // Menu.useMenu();
     }
 }
