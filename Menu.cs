@@ -16,6 +16,17 @@ public static class Menu
     Enter an option:
     """;
     
+    public static void useMenu()
+    {
+        string? menuSelect = null;
+        do
+        {
+            Menu.displayMenu();
+            menuSelect = Console.ReadLine();
+            Menu.menuSwitch(menuSelect);
+        } while (menuSelect != "5" && menuSelect != "6");
+    }
+    
     private static void menuSwitch(string s)
     {
         switch (s)
@@ -90,14 +101,5 @@ public static class Menu
         Console.WriteLine("myStatement");
     }
 
-    public static void useMenu()
-    {
-        string? menuSelect = null;
-        do
-        {
-            Menu.displayMenu();
-            menuSelect = Console.ReadLine();
-            Menu.menuSwitch(menuSelect);
-        } while (menuSelect != "5" && menuSelect != "6");
-    }
+    
 }
