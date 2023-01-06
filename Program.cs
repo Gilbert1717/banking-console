@@ -1,3 +1,10 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System;
+using s3665887_a1;
 
-Console.WriteLine("Hello, World!");
+class Program
+{
+    static void Main()
+    {
+        Menu.useMenu();
+    }
+}
