@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using s3665887_a1.DTOs;
+using s3665887_a1.Repositories;
 
 namespace s3665887_a1;
 
@@ -20,14 +21,10 @@ class Program
         });
         foreach (Customer customer in customers)
         {
-            foreach (Account account in customer.Accounts)
-            {
-                Console.WriteLine(account.Transactions[0].TransactionTimeUtc.ToString("dd/MM/yyyy hh:mm:ss tt"));
-            }
 
-            
-            
+            CustomerRepository customerRepository = new CustomerRepository();
+            customerRepository.SaveCustomer(customer);
         }
-        Console.WriteLine(customers.Count);
+
     }
 }

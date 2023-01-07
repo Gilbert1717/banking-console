@@ -1,4 +1,4 @@
-namespace s3665887_a1;
+namespace s3665887_a1.Services;
 
 public static class Menu
 {

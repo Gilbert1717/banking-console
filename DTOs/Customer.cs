@@ -2,22 +2,22 @@ namespace s3665887_a1.DTOs;
 
 public class Customer
 {
-    private int CustomerID { get; init; }
-    private string Name { get; init; }
-    private string Address { get; set; }
-    private string City { get; set; }
-    private string PostCode { get; set; }
-    public List<Account> Accounts { get; init; }
-    private Dictionary<string, string> Login { get; }
+    public int CustomerID { get; }
+    public string Name { get; }
+    public string? Address { get; set; }
+    public string? City { get; set; }
+    public string? PostCode { get; set; }
+    public List<Account> Accounts { get; }
+    public Login Login { get; }
 
     public Customer(
         int customerId,
         string name,
-        string address,
-        string city,
-        string postCode,
+        string? address,
+        string? city,
+        string? postCode,
         List<Account> accounts,
-        Dictionary<string, string> login)
+        Login login)
     {
         CustomerID = customerId;
         Name = name;
