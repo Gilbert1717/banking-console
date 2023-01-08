@@ -8,7 +8,7 @@ public class TransactionRepository
 
     public void Save(Transaction transaction)
     {
-        var parameters = new Dictionary<string, string?>();
+        var parameters = new Dictionary<string, object?>();
         // TODO: need to get unknown values from somewhere
         parameters.Add("TransactionType", transaction.TransactionType);
         parameters.Add("AccountNumber", transaction.AccountNumber);

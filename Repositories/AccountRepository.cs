@@ -8,7 +8,7 @@ public class AccountRepository
 
     public void Save(Account account)
     {
-        var parameters = new Dictionary<string, string?>();
+        var parameters = new Dictionary<string, object?>();
         parameters.Add("AccountType", account.AccountType);
         parameters.Add("CustomerID", account.CustomerID);
         parameters.Add("AccountNumber", account.AccountNumber.ToString());
@@ -20,10 +20,10 @@ public class AccountRepository
 
     public void Update(Account account)
     {
-        var parameters = new Dictionary<string, string?>();
+        var parameters = new Dictionary<string, object?>();
 
 
-        var conditions = new Dictionary<string, string?>();
+        var conditions = new Dictionary<string, object?>();
         parameters.Add("AccountNumber", account.AccountNumber.ToString());
 
 

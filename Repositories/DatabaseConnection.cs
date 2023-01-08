@@ -11,7 +11,7 @@ public static class DatabaseConnection
         "uid=s3665887_a1;" +
         "pwd=abc123";
 
-    public static DataRow[] GetDataTable(string sqlCommand, Dictionary<string, string?> sqlParameters)
+    public static DataRow[] GetDataTable(string sqlCommand, Dictionary<string, object?> sqlParameters)
     {
         using var connection = new SqlConnection(ConnectionString);
         connection.Open();
@@ -24,7 +24,7 @@ public static class DatabaseConnection
         return table.Select();
     }
 
-    public static void InsertData(string table, Dictionary<string, string?> sqlParameters)
+    public static void InsertData(string table, Dictionary<string, object?> sqlParameters)
     {
         using var connection = new SqlConnection(ConnectionString);
         connection.Open();
@@ -42,8 +42,8 @@ public static class DatabaseConnection
 
     public static void UpdateData(
         string table,
-        Dictionary<string, string?> valueParameters,
-        Dictionary<string, string?> conditions)
+        Dictionary<string, object?> valueParameters,
+        Dictionary<string, object?> conditions)
     {
         using var connection = new SqlConnection(ConnectionString);
         connection.Open();
@@ -66,7 +66,7 @@ public static class DatabaseConnection
 
     private static SqlCommand GetCommandWithParameters(
         string sqlCommand,
-        Dictionary<string, string?> sqlParameters,
+        Dictionary<string, object?> sqlParameters,
         SqlConnection connection)
     {
         var command = connection.CreateCommand();

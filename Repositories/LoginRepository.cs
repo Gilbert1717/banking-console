@@ -8,7 +8,7 @@ public class LoginRepository
 
     public void Save(Login login)
     {
-        var parameters = new Dictionary<string, string?>();
+        var parameters = new Dictionary<string, object?>();
         // TODO: need to get customerID from somewhere
         parameters.Add("CustomerID", customerID);
         parameters.Add("LoginID", login.LoginID);
@@ -19,10 +19,10 @@ public class LoginRepository
 
     public void Update(Login login)
     {
-        var parameters = new Dictionary<string, string?>();
+        var parameters = new Dictionary<string, object?>();
         parameters.Add("PasswordHash", login.PasswordHash);
 
-        var conditions = new Dictionary<string, string?>();
+        var conditions = new Dictionary<string, object?>();
         conditions.Add("LoginID", login.LoginID);
 
         DatabaseConnection.UpdateData(TableName, parameters, conditions);

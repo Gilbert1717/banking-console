@@ -8,8 +8,8 @@ public class CustomerRepository
 
     public void Save(Customer customer)
     {
-        var parameters = new Dictionary<string, string?>();
-        parameters.Add("CustomerID", customer.CustomerID.ToString());
+        var parameters = new Dictionary<string, object?>();
+        parameters.Add("CustomerID", customer.CustomerID);
         parameters.Add("Name", customer.Name);
         parameters.Add("Address", customer.Address);
         parameters.Add("City", customer.City);
@@ -20,13 +20,13 @@ public class CustomerRepository
 
     public void Update(Customer customer)
     {
-        var parameters = new Dictionary<string, string?>();
+        var parameters = new Dictionary<string, object?>();
         parameters.Add("Name", customer.Name);
         parameters.Add("Address", customer.Address);
         parameters.Add("City", customer.City);
         parameters.Add("PostCode", customer.PostCode);
 
-        var conditions = new Dictionary<string, string?>();
+        var conditions = new Dictionary<string, object?>();
         conditions.Add("CustomerID", customer.CustomerID.ToString());
 
         DatabaseConnection.UpdateData(TableName, parameters, conditions);
@@ -36,7 +36,7 @@ public class CustomerRepository
     {
         string sqlCommand = $"select * from {TableName} where CustomerID = @CustomerID;";
 
-        var parameters = new Dictionary<string, string?>();
+        var parameters = new Dictionary<string, object?>();
         parameters.Add("CustomerID", id.ToString());
         var customerData = DatabaseConnection.GetDataTable(sqlCommand, parameters);
 
