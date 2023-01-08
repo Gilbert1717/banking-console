@@ -4,7 +4,7 @@ namespace s3665887_a1.Repositories;
 
 public class CustomerRepository
 {
-    private const string TableName = "Customer";
+    private const string TableName = "[Customer]";
 
     public void Save(Customer customer)
     {
