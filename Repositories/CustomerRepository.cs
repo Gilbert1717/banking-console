@@ -4,30 +4,38 @@ namespace s3665887_a1.Repositories;
 
 public class CustomerRepository
 {
-    public void SaveCustomer(Customer customer)
+    private const string TableName = "Customer";
+
+    public void Save(Customer customer)
     {
-        string customerId = "CustomerID";
-        string name = "Name";
-        string address = "Address";
-        string city = "City";
-        string postCode = "PostCode";
-
-        string sqlCommand = $"INSERT INTO Customer ({customerId}, {name}, {address}, {city}, {postCode})" +
-                            $"VALUES(@{customerId}, @{name}, @{address}, @{city}, @{postCode});";
-
-
         var parameters = new Dictionary<string, string?>();
-        parameters.Add(customerId, customer.CustomerID.ToString());
-        parameters.Add(name, customer.Name);
-        parameters.Add(address, customer.Address);
-        parameters.Add(city, customer.City);
-        parameters.Add(postCode, customer.PostCode);
-        DatabaseConnection.SaveData(sqlCommand, parameters);
+        parameters.Add("CustomerID", customer.CustomerID.ToString());
+        parameters.Add("Name", customer.Name);
+        parameters.Add("Address", customer.Address);
+        parameters.Add("City", customer.City);
+        parameters.Add("PostCode", customer.PostCode);
+
+        DatabaseConnection.InsertData(TableName, parameters);
     }
 
-    public Customer GetCustomerById(int id)
+    public void Update(Customer customer)
     {
-        string sqlCommand = "select * from Customer where CustomerID = @CustomerID;";
+        var parameters = new Dictionary<string, string?>();
+        parameters.Add("Name", customer.Name);
+        parameters.Add("Address", customer.Address);
+        parameters.Add("City", customer.City);
+        parameters.Add("PostCode", customer.PostCode);
+
+        var conditions = new Dictionary<string, string?>();
+        conditions.Add("CustomerID", customer.CustomerID.ToString());
+
+        DatabaseConnection.UpdateData(TableName, parameters, conditions);
+    }
+
+    public Customer GetById(int id)
+    {
+        string sqlCommand = $"select * from {TableName} where CustomerID = @CustomerID;";
+
         var parameters = new Dictionary<string, string?>();
         parameters.Add("CustomerID", id.ToString());
         var customerData = DatabaseConnection.GetDataTable(sqlCommand, parameters);
