@@ -7,8 +7,8 @@ public class Customer
     public string? Address { get; set; }
     public string? City { get; set; }
     public string? PostCode { get; set; }
-    public List<Account> Accounts { get; }
-    public Login Login { get; }
+    public List<Account>? Accounts { get; }
+    public Login? Login { get; }
 
     public Customer(
         int customerId,

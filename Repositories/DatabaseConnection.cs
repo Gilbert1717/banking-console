@@ -10,14 +10,18 @@ public static class DatabaseConnection
         "server=rmit.australiaeast.cloudapp.azure.com;Encrypt=False;uid=s3665887_a1;pwd=abc123";
     
     
-    public static DataRow[] GetDataTable(string sqlCommand)
+    public static DataRow[] GetDataTable(string sqlCommand, Dictionary<string,string?> sqlParameters)
     {
         // NOTE: Can use a using declaration instead of a using block.
         using var connection = new SqlConnection(connectionString);
         connection.Open();
 
         var command = connection.CreateCommand();
-        command.CommandText = sqlCommand;
+        command.CommandText = @sqlCommand;
+        foreach(var parameter in sqlParameters)
+        {
+            command.Parameters.AddWithValue(parameter.Key, parameter.Value ?? (object) DBNull.Value);
+        }
 
         var table = new DataTable();
         new SqlDataAdapter(command).Fill(table);

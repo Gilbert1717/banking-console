@@ -4,7 +4,7 @@ public class Login
 {
     public string LoginID { get; }
     public string PasswordHash { get; }
-    
+
     public Login(string loginId, string passwordHash)
     {
         LoginID = loginId;
