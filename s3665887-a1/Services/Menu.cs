@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace s3665887_a1;
+namespace s3665887_a1.Services;
 
 public static class Menu
 {
@@ -15,33 +13,33 @@ public static class Menu
 
     Enter an option:
     """;
-    
+
     public static void useMenu()
     {
         string? menuSelect = null;
         do
         {
-            Menu.displayMenu();
+            displayMenu();
             menuSelect = Console.ReadLine();
-            Menu.menuSwitch(menuSelect);
+            menuSwitch(menuSelect);
         } while (menuSelect != "5" && menuSelect != "6");
     }
-    
+
     private static void menuSwitch(string s)
     {
         switch (s)
         {
             case "1":
-                Menu.deposit();
+                deposit();
                 break;
             case "2":
-                Menu.withdraw();
+                withdraw();
                 break;
             case "3":
-                Menu.transfer();
+                transfer();
                 break;
             case "4":
-                Menu.myStatement();
+                myStatement();
                 break;
             case "5":
                 Console.WriteLine("Successfully Logout");
@@ -69,8 +67,8 @@ public static class Menu
     //     }
     //      
     // }
-    
-    
+
+
     // public static void loginMenu()
     // {
     //     Console.WriteLine("Enter Login ID:");
@@ -100,6 +98,4 @@ public static class Menu
     {
         Console.WriteLine("myStatement");
     }
-
-    
 }
