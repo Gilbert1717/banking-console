@@ -11,7 +11,7 @@ public static class DatabaseConnection
         "uid=s3665887_a1;" +
         "pwd=abc123";
 
-    public static DataRow[] GetDataTable(string sqlCommand, Dictionary<string, object?> sqlParameters)
+    public static DataRow[] GetDataTable(string sqlCommand, Dictionary<string, object?>? sqlParameters = null)
     {
         using var connection = new SqlConnection(ConnectionString);
         connection.Open();
@@ -23,6 +23,8 @@ public static class DatabaseConnection
 
         return table.Select();
     }
+    
+    
 
     public static void InsertData(string table, Dictionary<string, object?> sqlParameters)
     {
@@ -34,10 +36,7 @@ public static class DatabaseConnection
 
         var command = GetCommandWithParameters(sqlCommand, sqlParameters, connection);
 
-        var updates = command.ExecuteNonQuery();
-
-        // TODO: remove print
-        Console.WriteLine($"{updates} rows updated.");
+        command.ExecuteNonQuery();
     }
 
     public static void UpdateData(
@@ -58,26 +57,25 @@ public static class DatabaseConnection
         var sqlParameters = valueParameters.Union(conditions).ToDictionary(k => k.Key, v => v.Value);
         var command = GetCommandWithParameters(sqlCommand, sqlParameters, connection);
 
-        var updates = command.ExecuteNonQuery();
+        command.ExecuteNonQuery();
 
-        // TODO: remove print
-        Console.WriteLine($"{updates} rows updated.");
+       
     }
 
     private static SqlCommand GetCommandWithParameters(
         string sqlCommand,
-        Dictionary<string, object?> sqlParameters,
+        Dictionary<string, object?>? sqlParameters,
         SqlConnection connection)
     {
         var command = connection.CreateCommand();
         command.CommandText = @sqlCommand;
-        foreach (var parameter in sqlParameters)
+        if (sqlParameters != null)
         {
-            command.Parameters.AddWithValue(parameter.Key, parameter.Value ?? (object)DBNull.Value);
+            foreach (var parameter in sqlParameters)
+            {
+                command.Parameters.AddWithValue(parameter.Key, parameter.Value ?? (object)DBNull.Value);
+            }
         }
-
-        // TODO: remove print
-        Console.WriteLine(command.CommandText);
 
         return command;
     }

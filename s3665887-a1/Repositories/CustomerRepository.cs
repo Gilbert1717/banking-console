@@ -1,3 +1,5 @@
+using System.Data;
+using Microsoft.Data.SqlClient;
 using s3665887_a1.Models;
 
 namespace s3665887_a1.Repositories;
@@ -6,7 +8,7 @@ public class CustomerRepository
 {
     private const string TableName = "[Customer]";
 
-    public void Save(DTOs.CustomerDTO customer)
+    public void InsertToDB(DTOs.CustomerDTO customer)
     {
         var parameters = new Dictionary<string, object?>();
         parameters.Add("CustomerID", customer.CustomerID);
@@ -32,22 +34,28 @@ public class CustomerRepository
         DatabaseConnection.UpdateData(TableName, parameters, conditions);
     }
 
-    // public Customer GetById(int CustomerID)
-    // {
-    //     string sqlCommand = $"select * from {TableName} where CustomerID = @CustomerID;";
-    //
-    //     var parameters = new Dictionary<string, object?>();
-    //     parameters.Add("CustomerID", CustomerID.ToString());
-    //     var customerData = DatabaseConnection.GetDataTable(sqlCommand, parameters);
-    //
-    //     return new Customer(
-    //         int.Parse(customerData[0]["CustomerID"].ToString()),
-    //         customerData[0]["Name"].ToString(),
-    //         customerData[0]["Address"].ToString(),
-    //         customerData[0]["City"].ToString(),
-    //         customerData[0]["PostCode"].ToString(),
-    //         null,
-    //         null
-    //     );
-    // }
+    //check if there is any existing customer in database
+    public static bool Any()
+    {
+        string sqlCommand = $"select count(*) as count from {TableName} ;";
+        var count = DatabaseConnection.GetDataTable(sqlCommand)[0];
+        return count.Field<int>("count") > 0;
+    }
+
+    public Customer GetById(int CustomerID)
+    {
+        string sqlCommand = $"select * from {TableName} where CustomerID = @CustomerID;";
+
+        var parameters = new Dictionary<string, object?>();
+        parameters.Add("CustomerID", CustomerID);
+        var customerData = DatabaseConnection.GetDataTable(sqlCommand, parameters)[0];
+
+        return new Customer(
+            customerData.Field<int>("CustomerID"),
+            customerData.Field<string>("Name"),
+            customerData.Field<string?>("Address"),
+            customerData.Field<string?>("City"),
+            customerData.Field<string?>("PostCode")
+        );
+    }
 }

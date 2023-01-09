@@ -7,7 +7,7 @@ public class AccountRepository
     private const string TableName = "[Account]";
     
     
-    public void Save(DTOs.AccountDTO account)
+    public void InsertToDB(DTOs.AccountDTO account)
     {
         var parameters = new Dictionary<string, object?>();
         parameters.Add("AccountNumber", account.AccountNumber);
