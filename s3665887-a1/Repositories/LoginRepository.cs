@@ -1,3 +1,4 @@
+using System.Data;
 using s3665887_a1.Models;
 
 namespace s3665887_a1.Repositories;
@@ -6,7 +7,7 @@ public class LoginRepository
 {
     private const string TableName = "[Login]";
 
-    public void Save(Login login)
+    public void InsertToDB(Login login)
     {
         var parameters = new Dictionary<string, object?>();
         // TODO: need to get customerID from somewhere
@@ -28,9 +29,24 @@ public class LoginRepository
         DatabaseConnection.UpdateData(TableName, parameters, conditions);
     }
 
-    // public Login GetById(int id)
-    // {
-    //     // TODO: to be implemented
-    //     return new Login();
-    // }
+    public Login? GetById(string loginID)
+    {
+        string sqlCommand = $"select * from {TableName} where LoginID = @loginID;";
+        var parameters = new Dictionary<string, object?>();
+        parameters.Add("LoginID", loginID);
+        var loginDatas = DatabaseConnection.GetDataTable(sqlCommand, parameters);
+        if (loginDatas.Length == 0)
+        {
+            return null;
+        }
+
+        var loginData = loginDatas[0];
+        return new Login
+        {
+            LoginID = loginData.Field<string>("LoginID"),
+            CustomerID = loginData.Field<int>("CustomerID"),
+            PasswordHash = loginData.Field<string>("PasswordHash")
+            
+        };
+    }
 }

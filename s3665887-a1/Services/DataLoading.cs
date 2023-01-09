@@ -18,19 +18,29 @@ public class DataLoading
     
     public static void preloading()
     {
+        //
+        if (CustomerRepository.Any())
+        {
+            return;
+        }
+        //Create instances which will be used for loading data
         JSONConvert jsonConvert = new JSONConvert();
         List<DTOs.CustomerDTO> customers = jsonConvert.covertJSON();
         CustomerRepository customerRepository = new CustomerRepository();
+        LoginRepository loginRepository = new LoginRepository();
         AccountRepository accountRepository = new AccountRepository();
         TransactionRepository transactionRepository = new TransactionRepository();
         
+        
+        //nested for loop to convert DTO to Business Obj and load them to database.
         foreach (var customer in customers)
         {
-            customerRepository.Save(customer);
+            customerRepository.InsertToDB(customer);
+            Login login = loginCovert(customer, customer.Login);
+            loginRepository.InsertToDB(login);
             foreach (var account in customer.Accounts)
             {
-                account.CustomerID = customer.CustomerID;
-                accountRepository.Save(account);
+                accountRepository.InsertToDB(account);
                 foreach (var transaction in account.Transactions)
                 {
                     Transaction transactionB = transactionCovert(account, transaction);
