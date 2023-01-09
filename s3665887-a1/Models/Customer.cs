@@ -1,4 +1,6 @@
-namespace s3665887_a1.DTOs;
+using s3665887_a1.Repositories;
+
+namespace s3665887_a1.Models;
 
 public class Customer
 {
@@ -7,24 +9,22 @@ public class Customer
     public string? Address { get; set; }
     public string? City { get; set; }
     public string? PostCode { get; set; }
-    public List<Account>? Accounts { get; }
-    public Login? Login { get; }
+    
 
     public Customer(
         int customerId,
         string name,
         string? address,
         string? city,
-        string? postCode,
-        List<Account> accounts,
-        Login login)
+        string? postCode)
+        
     {
         CustomerID = customerId;
         Name = name;
         Address = address;
         City = city;
         PostCode = postCode;
-        Accounts = accounts;
-        Login = login;
     }
+    
+    
 }

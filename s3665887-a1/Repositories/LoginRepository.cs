@@ -1,4 +1,4 @@
-using s3665887_a1.DTOs;
+using s3665887_a1.Models;
 
 namespace s3665887_a1.Repositories;
 
@@ -10,7 +10,7 @@ public class LoginRepository
     {
         var parameters = new Dictionary<string, object?>();
         // TODO: need to get customerID from somewhere
-        parameters.Add("CustomerID", customerID);
+        parameters.Add("CustomerID", login.CustomerID);
         parameters.Add("LoginID", login.LoginID);
         parameters.Add("PasswordHash", login.PasswordHash);
 
@@ -28,9 +28,9 @@ public class LoginRepository
         DatabaseConnection.UpdateData(TableName, parameters, conditions);
     }
 
-    public Login GetById(int id)
-    {
-        // TODO: to be implemented
-        return new Login();
-    }
+    // public Login GetById(int id)
+    // {
+    //     // TODO: to be implemented
+    //     return new Login();
+    // }
 }
