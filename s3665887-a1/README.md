@@ -13,13 +13,13 @@ What this application do...
 
     .
     ├── DTOs                    # Objects transferring data from server and database 
-    ├── Repositories            # Classes communicating with the database
-    ├── Services                
+    ├── Repositories            # Classes communicating with the database           
     │   ├── Menu.cs             # 
     │   ├── faq.md              # 
     │   ├── misc.md             # 
     │   ├── usage.md            # 
-    │   └── ...              
+    │   └── ...   
+    ├── Services                
     └── Trello                  # Trello board screenshots
 
 ### Answers for Part 4: Design and Implementation [7 marks]
@@ -41,7 +41,7 @@ answer for f)
 > g) [1 mark] Implement and use a class library in your project. You must justify its use and
 provide an explanation in the readme file.  
 
-answer for f)
+answer for g)
 
 > h) [1 mark] Use C#’s required keyword for a property in your implementation. The readme
 file should include:
@@ -51,7 +51,10 @@ context it has been used.
 > - Where in the code, i.e., which file(s) and code within those file(s) that are using
 this keyword.
 
-answer for h)
+The "required" keyword has been added to 2 properties in `Login.cs`, namely, `LoginID` and `PasswordHash`.
+
+This keyword ensures non-null values are always provided for essential fields when initializing the object. In this case,
+a `Login` object will always have a valid `LoginID` and `PasswordHash` to make sure the authentication process is valid.
 
 > i)  [2  marks]  Use  C#’s  asynchronous  keywords  async  and  await  in  your  implementation.
 The readme file should include:
