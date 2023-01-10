@@ -1,9 +1,9 @@
 using Database;
 using s3665887_a1.Models;
 
-namespace s3665887_a1.Repositories;
+namespace s3665887_a1.Repositories.SqlRepositories;
 
-public class TransactionRepository
+public class TransactionSqlRepository : ITransactionRepository
 {
     private const string TableName = "[Transaction]";
 

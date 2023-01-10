@@ -5,22 +5,27 @@ namespace s3665887_a1.Services;
 
 public class DataLoading
 {
-    private static Login loginCovert(DTOs.CustomerDTO customer, DTOs.LoginDTO login)
+    private readonly ICustomerRepository _customerRepository;
+    private readonly ILoginRepository _loginRepository;
+    private readonly IAccountRepository _accountRepository;
+    private readonly ITransactionRepository _transactionRepository;
+
+    public DataLoading(
+        ICustomerRepository customerRepository,
+        ILoginRepository loginRepository,
+        IAccountRepository accountRepository,
+        ITransactionRepository transactionRepository
+    )
     {
-        return new Login(login.LoginID, customer.CustomerID, login.PasswordHash);
+        _customerRepository = customerRepository;
+        _loginRepository = loginRepository;
+        _accountRepository = accountRepository;
+        _transactionRepository = transactionRepository;
     }
 
-    private static Transaction transactionCovert(DTOs.AccountDTO account,
-        DTOs.TransactionDTO transaction)
+    public void Preloading()
     {
-        return new Transaction(TransactionType.D, account.AccountNumber, transaction.Amount,
-            null, transaction.Comment, transaction.TransactionTimeUtc);
-    }
-
-    public static void preloading()
-    {
-        //
-        if (CustomerRepository.Any())
+        if (_customerRepository.Any())
         {
             return;
         }
@@ -28,27 +33,35 @@ public class DataLoading
         //Create instances which will be used for loading data
         JSONConvert jsonConvert = new JSONConvert();
         List<DTOs.CustomerDTO> customers = jsonConvert.covertJSON();
-        CustomerRepository customerRepository = new CustomerRepository();
-        LoginRepository loginRepository = new LoginRepository();
-        AccountRepository accountRepository = new AccountRepository();
-        TransactionRepository transactionRepository = new TransactionRepository();
 
 
         //nested for loop to convert DTO to Business Obj and load them to database.
         foreach (var customer in customers)
         {
-            customerRepository.InsertToDB(customer);
-            Login login = loginCovert(customer, customer.Login);
-            loginRepository.InsertToDB(login);
+            _customerRepository.InsertToDB(customer);
+            Login login = LoginCovert(customer, customer.Login);
+            _loginRepository.InsertToDB(login);
             foreach (var account in customer.Accounts)
             {
-                accountRepository.InsertToDB(account);
+                _accountRepository.InsertToDB(account);
                 foreach (var transaction in account.Transactions)
                 {
-                    Transaction transactionB = transactionCovert(account, transaction);
-                    transactionRepository.Save(transactionB);
+                    Transaction transactionB = TransactionCovert(account, transaction);
+                    _transactionRepository.Save(transactionB);
                 }
             }
         }
+    }
+
+    private static Login LoginCovert(DTOs.CustomerDTO customer, DTOs.LoginDTO login)
+    {
+        return new Login(login.LoginID, customer.CustomerID, login.PasswordHash);
+    }
+
+    private static Transaction TransactionCovert(DTOs.AccountDTO account,
+        DTOs.TransactionDTO transaction)
+    {
+        return new Transaction(TransactionType.D, account.AccountNumber, transaction.Amount,
+            null, transaction.Comment, transaction.TransactionTimeUtc);
     }
 }

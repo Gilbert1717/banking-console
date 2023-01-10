@@ -2,9 +2,9 @@ using System.Data;
 using Database;
 using s3665887_a1.Models;
 
-namespace s3665887_a1.Repositories;
+namespace s3665887_a1.Repositories.SqlRepositories;
 
-public class LoginRepository
+public class LoginSqlRepository : ILoginRepository
 {
     private const string TableName = "[Login]";
 
