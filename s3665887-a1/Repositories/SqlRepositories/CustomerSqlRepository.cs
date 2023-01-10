@@ -1,11 +1,10 @@
 using System.Data;
-using Microsoft.Data.SqlClient;
+using Database;
 using s3665887_a1.Models;
-using SqlConnection = Database.SqlConnection;
 
-namespace s3665887_a1.Repositories;
+namespace s3665887_a1.Repositories.SqlRepositories;
 
-public class CustomerRepository
+public class CustomerSqlRepository : ICustomerRepository
 {
     private const string TableName = "[Customer]";
 
@@ -36,19 +35,19 @@ public class CustomerRepository
     }
 
     //check if there is any existing customer in database
-    public static bool Any()
+    public bool Any()
     {
         string sqlCommand = $"select count(*) as count from {TableName} ;";
         var count = SqlConnection.GetDataTable(sqlCommand)[0];
         return count.Field<int>("count") > 0;
     }
 
-    public Customer GetById(int CustomerID)
+    public Customer GetById(int customerId)
     {
         string sqlCommand = $"select * from {TableName} where CustomerID = @CustomerID;";
 
         var parameters = new Dictionary<string, object?>();
-        parameters.Add("CustomerID", CustomerID);
+        parameters.Add("CustomerID", customerId);
         var customerData = SqlConnection.GetDataTable(sqlCommand, parameters)[0];
 
         return new Customer(

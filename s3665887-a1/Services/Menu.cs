@@ -1,4 +1,5 @@
 using s3665887_a1.Models;
+using s3665887_a1.Repositories.SqlRepositories;
 
 namespace s3665887_a1.Services;
 
@@ -102,7 +103,7 @@ public static class Menu
         string userName = Console.ReadLine();
         Console.Write("Enter Password: ");
         string userPassword = PasswordMasking();
-        LoginService loginService = new LoginService();
+        LoginService loginService = new LoginService(new LoginSqlRepository());
         return loginService.AuthPassword(userName, userPassword);
     }
 

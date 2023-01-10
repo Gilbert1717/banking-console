@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
+using Connection = Microsoft.Data.SqlClient.SqlConnection;
 
 namespace Database;
 
@@ -13,7 +14,7 @@ public static class SqlConnection
 
     public static DataRow[] GetDataTable(string sqlCommand, Dictionary<string, object?>? sqlParameters = null)
     {
-        using var connection = new Microsoft.Data.SqlClient.SqlConnection(ConnectionString);
+        using var connection = new Connection(ConnectionString);
         connection.Open();
 
         var command = GetCommandWithParameters(sqlCommand, sqlParameters, connection);
@@ -23,12 +24,10 @@ public static class SqlConnection
 
         return table.Select();
     }
-    
-    
 
     public static void InsertData(string table, Dictionary<string, object?> sqlParameters)
     {
-        using var connection = new Microsoft.Data.SqlClient.SqlConnection(ConnectionString);
+        using var connection = new Connection(ConnectionString);
         connection.Open();
 
         string sqlCommand = $"INSERT INTO {table} ({string.Join(", ", sqlParameters.Keys)}) " +
@@ -44,7 +43,7 @@ public static class SqlConnection
         Dictionary<string, object?> valueParameters,
         Dictionary<string, object?> conditions)
     {
-        using var connection = new Microsoft.Data.SqlClient.SqlConnection(ConnectionString);
+        using var connection = new Connection(ConnectionString);
         connection.Open();
 
         var value = valueParameters.Keys.Select(key => $"{key} = @{key}");
@@ -58,14 +57,12 @@ public static class SqlConnection
         var command = GetCommandWithParameters(sqlCommand, sqlParameters, connection);
 
         command.ExecuteNonQuery();
-
-       
     }
 
     private static SqlCommand GetCommandWithParameters(
         string sqlCommand,
         Dictionary<string, object?>? sqlParameters,
-        Microsoft.Data.SqlClient.SqlConnection connection)
+        Connection connection)
     {
         var command = connection.CreateCommand();
         command.CommandText = @sqlCommand;

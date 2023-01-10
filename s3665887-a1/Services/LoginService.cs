@@ -1,15 +1,22 @@
 using s3665887_a1.Models;
 using s3665887_a1.Repositories;
+using s3665887_a1.Repositories.SqlRepositories;
 using SimpleHashing.Net;
 
 namespace s3665887_a1.Services;
 
 public class LoginService
 {
+    private readonly ILoginRepository _loginRepository;
+
+    public LoginService(ILoginRepository loginRepository)
+    {
+        _loginRepository = loginRepository;
+    }
+
     public Customer? AuthPassword(string loginID, string password)
     {
-        LoginRepository loginRepository = new LoginRepository();
-        Login login = loginRepository.GetById(loginID);
+        Login? login = _loginRepository.GetById(loginID);
         if (login == null)
         {
             LoginFailWarning();
@@ -18,15 +25,15 @@ public class LoginService
 
         if (new SimpleHash().Verify(password, login.PasswordHash))
         {
-            CustomerRepository customerRepository = new CustomerRepository();
-            return customerRepository.GetById(login.CustomerID);
+            CustomerSqlRepository customerSqlRepository = new CustomerSqlRepository();
+            return customerSqlRepository.GetById(login.CustomerID);
         }
 
         LoginFailWarning();
         return null;
     }
 
-    private static void LoginFailWarning()
+    private void LoginFailWarning()
     {
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Red;
