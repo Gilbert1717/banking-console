@@ -103,7 +103,7 @@ public static class Menu
         Console.Write("Enter Password: ");
         string userPassword = PasswordMasking();
         LoginService loginService = new LoginService();
-        return loginService.authPassword(userName, userPassword);
+        return loginService.AuthPassword(userName, userPassword);
     }
 
     public static void displayMenu(Customer customer)

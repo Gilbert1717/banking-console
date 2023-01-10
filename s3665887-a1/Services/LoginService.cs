@@ -6,15 +6,13 @@ namespace s3665887_a1.Services;
 
 public class LoginService
 {
-    public Customer? authPassword(string loginID, string password)
+    public Customer? AuthPassword(string loginID, string password)
     {
         LoginRepository loginRepository = new LoginRepository();
         Login login = loginRepository.GetById(loginID);
         if (login == null)
         {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("\nLogin Failed\n");
+            LoginFailWarning();
             return null;
         }
 
@@ -24,9 +22,15 @@ public class LoginService
             return customerRepository.GetById(login.CustomerID);
         }
 
+        LoginFailWarning();
+        return null;
+    }
+
+    private static void LoginFailWarning()
+    {
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine("\nLogin Failed\n");
-        return null;
+        Console.ResetColor();
     }
 }
