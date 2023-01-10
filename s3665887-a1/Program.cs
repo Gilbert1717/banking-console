@@ -14,7 +14,7 @@ class Program
             new TransactionSqlRepository()
         );
         dataLoading.Preloading();
-
+        
         Menu.useMenu();
     }
 }

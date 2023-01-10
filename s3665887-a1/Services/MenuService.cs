@@ -9,7 +9,9 @@ public class MenuService
     private readonly ILoginRepository _loginRepository;
     private readonly IAccountRepository _accountRepository;
     private readonly ITransactionRepository _transactionRepository;
-
+    private readonly DepositService _depositService;
+    private readonly LoginService _loginService; 
+ 
     public MenuService(
         ICustomerRepository customerRepository,
         ILoginRepository loginRepository,
@@ -20,6 +22,9 @@ public class MenuService
         _loginRepository = loginRepository;
         _accountRepository = accountRepository;
         _transactionRepository = transactionRepository;
+        
+        _loginService = new LoginService(_loginRepository); 
+        _depositService = new DepositService(_transactionRepository);
     }
 
     public List<Account> getAccountList(Customer customer)
@@ -33,9 +38,18 @@ public class MenuService
     }
 
     public Customer? LoginCustomer(string userName, string userPassword)
-    { 
-        LoginService loginService = new LoginService(_loginRepository); 
-        return loginService.AuthPassword(userName,userPassword);
+    {
+        return _loginService.AuthPassword(userName,userPassword);
+    }
+
+    public Transaction? DepositAmountValidation(string amount, Account _account)
+    {
+        return _depositService.DepositAmountValidation(amount, _account);
+    }
+
+    public void SaveTransaction(Transaction transaction)
+    {
+        _depositService.SaveTransaction(transaction);
     }
         
 }

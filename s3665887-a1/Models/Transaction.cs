@@ -12,6 +12,9 @@ public enum TransactionType
 
 public class Transaction
 {
+    public readonly decimal atmWithdraw = 0.05m;
+    
+    public readonly decimal accountTransfer  = 0.1m;
     public int? TransactionID { get; } = null;
     public TransactionType TransactionType { get; init; }
     public int AccountNumber{get; init; }
@@ -20,6 +23,7 @@ public class Transaction
     public string? Comment { get; init; } = null;
     public DateTime TransactionTimeUtc { get; init; }
 
+    public Transaction() {}
     
     public Transaction(TransactionType transactionType, int accountNumber, decimal amount, string? destinationAccountNumber, string? comment, DateTime transactionTimeUtc)
     {

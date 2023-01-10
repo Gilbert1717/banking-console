@@ -41,7 +41,7 @@ public class AccountSqlRepository : IAccountRepository
         foreach (var row in accountData)
         {
             accounts.Add(new Account(row.Field<int>("AccountNumber"),
-                row.Field<AccountType>("AccountType"),
+                row.Field<string>("AccountType"),
                 row.Field<int>("CustomerID"),
                 row.Field<decimal>("Balance")));
         }

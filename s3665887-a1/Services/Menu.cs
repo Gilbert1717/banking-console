@@ -1,3 +1,4 @@
+using Microsoft.IdentityModel.Tokens;
 using s3665887_a1.Models;
 using s3665887_a1.Repositories.SqlRepositories;
 
@@ -7,6 +8,7 @@ public static class Menu
 {
     private static Account? _account = null;
     private static Customer? _customer = null;
+    
 
     private static string menuString = """
     [1] Deposit
@@ -25,7 +27,11 @@ public static class Menu
         new AccountSqlRepository(),
         new TransactionSqlRepository()
     );
-
+    
+    private static void PrintTitle()
+    {
+        Console.WriteLine($"---{_customer.Name}---");
+    }
 
     public static void useMenu()
     {
@@ -125,22 +131,17 @@ public static class Menu
     public static Dictionary<string, Account> selectAccountMenu()
     {
         PrintTitle();
-        Console.WriteLine("Please select an Account");
         var accounts = menuService.getAccountList(_customer);
         Dictionary<string, Account> dicAccounts = new Dictionary<string, Account>();
         foreach (var account in accounts)
         {
-            Console.Write("i");
-            if (account.AccountType == AccountType.S)
+            if (account.AccountType == "S") 
             {
                 Console.WriteLine("[S]avings Account");
-                dicAccounts.Add("S", account);
             }
-
-            else if (account.AccountType == AccountType.C)
+            else if (account.AccountType == "C")
             {
                 Console.WriteLine("[C]hecking Account");
-                dicAccounts.Add("C", account);
             }
 
             else
@@ -148,28 +149,23 @@ public static class Menu
                 Console.Clear();
                 Console.WriteLine("DataBase Error, please contact customer service");
             }
+            dicAccounts.Add(account.AccountType, account);
         }
-
+        Console.WriteLine("Please select an account: ");
         return dicAccounts;
     }
 
-    private static void PrintTitle()
-    {
-        Console.WriteLine($"---{_customer.Name}---");
-    }
+    
 
     public static void selectAccount()
     {
         var dicAccounts = selectAccountMenu();
         string accountSelection = Console.ReadLine().ToUpper();
-        PrintTitle();
         switch (accountSelection)
         {
             case "C":
-                _account = dicAccounts["C"];
-                break;
             case "S":
-                _account = dicAccounts["S"];
+                _account = dicAccounts[accountSelection];
                 break;
             default:
                 Console.WriteLine("Invalid input");
@@ -178,15 +174,27 @@ public static class Menu
         }
     }
 
-    public static void depositMenu()
+    public static void depositAmountMenu()
     {
-        PrintTitle();
-        Console.WriteLine("deposit");
+        Transaction? transaction;
+        do
+        {
+            PrintTitle();
+            Console.WriteLine("Please input the amount: ");
+            string amount = Console.ReadLine();
+            transaction = menuService.DepositAmountValidation(amount, _account);
+        } while (transaction == null);
+
+        menuService.SaveTransaction(transaction);
     }
+    
+
+    
 
     public static void deposit()
     {
         selectAccount();
+        depositAmountMenu();
     }
 
     public static void withdraw()
