@@ -9,13 +9,14 @@ public class DataLoading
     {
         return new Login(login.LoginID, customer.CustomerID, login.PasswordHash);
     }
+
     private static Transaction transactionCovert(DTOs.AccountDTO account,
         DTOs.TransactionDTO transaction)
     {
-        return new Transaction(TransactionType.D, account.AccountNumber, transaction.Amount, 
+        return new Transaction(TransactionType.D, account.AccountNumber, transaction.Amount,
             null, transaction.Comment, transaction.TransactionTimeUtc);
     }
-    
+
     public static void preloading()
     {
         //
@@ -23,6 +24,7 @@ public class DataLoading
         {
             return;
         }
+
         //Create instances which will be used for loading data
         JSONConvert jsonConvert = new JSONConvert();
         List<DTOs.CustomerDTO> customers = jsonConvert.covertJSON();
@@ -30,8 +32,8 @@ public class DataLoading
         LoginRepository loginRepository = new LoginRepository();
         AccountRepository accountRepository = new AccountRepository();
         TransactionRepository transactionRepository = new TransactionRepository();
-        
-        
+
+
         //nested for loop to convert DTO to Business Obj and load them to database.
         foreach (var customer in customers)
         {

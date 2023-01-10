@@ -1,3 +1,4 @@
+using Database;
 using s3665887_a1.Models;
 
 namespace s3665887_a1.Repositories;
@@ -15,7 +16,7 @@ public class AccountRepository
         parameters.Add("CustomerID", account.CustomerID);
         parameters.Add("Balance", caculateBalance(account.Transactions));
 
-        DatabaseConnection.InsertData(TableName, parameters);
+        SqlConnection.InsertData(TableName, parameters);
     }
 
     public decimal caculateBalance(DTOs.TransactionDTO[] transactions)
@@ -38,7 +39,7 @@ public class AccountRepository
         parameters.Add("AccountNumber", account.AccountNumber.ToString());
 
 
-        DatabaseConnection.UpdateData(TableName, parameters, conditions);
+        SqlConnection.UpdateData(TableName, parameters, conditions);
     }
 
     // public Account GetAccount(int CustomerID)
@@ -49,7 +50,7 @@ public class AccountRepository
     //
     //     var parameters = new Dictionary<string, object?>();
     //     parameters.Add("CustomerID", id.ToString());
-    //     var accountDatas = DatabaseConnection.GetDataTable(sqlCommand, parameters);
+    //     var accountDatas = Database.GetDataTable(sqlCommand, parameters);
     //     foreach (var accountData in accountDatas)
     //     {
     //         Accounts.Add(Account(

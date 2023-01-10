@@ -1,6 +1,7 @@
 using System.Data;
 using Microsoft.Data.SqlClient;
 using s3665887_a1.Models;
+using SqlConnection = Database.SqlConnection;
 
 namespace s3665887_a1.Repositories;
 
@@ -17,7 +18,7 @@ public class CustomerRepository
         parameters.Add("City", customer.City);
         parameters.Add("PostCode", customer.PostCode);
 
-        DatabaseConnection.InsertData(TableName, parameters);
+        SqlConnection.InsertData(TableName, parameters);
     }
 
     public void Update(Customer customer)
@@ -31,14 +32,14 @@ public class CustomerRepository
         var conditions = new Dictionary<string, object?>();
         conditions.Add("CustomerID", customer.CustomerID.ToString());
 
-        DatabaseConnection.UpdateData(TableName, parameters, conditions);
+        SqlConnection.UpdateData(TableName, parameters, conditions);
     }
 
     //check if there is any existing customer in database
     public static bool Any()
     {
         string sqlCommand = $"select count(*) as count from {TableName} ;";
-        var count = DatabaseConnection.GetDataTable(sqlCommand)[0];
+        var count = SqlConnection.GetDataTable(sqlCommand)[0];
         return count.Field<int>("count") > 0;
     }
 
@@ -48,7 +49,7 @@ public class CustomerRepository
 
         var parameters = new Dictionary<string, object?>();
         parameters.Add("CustomerID", CustomerID);
-        var customerData = DatabaseConnection.GetDataTable(sqlCommand, parameters)[0];
+        var customerData = SqlConnection.GetDataTable(sqlCommand, parameters)[0];
 
         return new Customer(
             customerData.Field<int>("CustomerID"),

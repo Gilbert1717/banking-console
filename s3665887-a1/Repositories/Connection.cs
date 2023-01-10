@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 
 namespace s3665887_a1.Repositories;
 
-public static class DatabaseConnection
+public static class Connection
 {
     private const string ConnectionString =
         "server=rmit.australiaeast.cloudapp.azure.com;" +
