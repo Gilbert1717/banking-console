@@ -30,39 +30,27 @@ public class AccountSqlRepository : IAccountRepository
         SqlConnection.UpdateData(TableName, parameters, conditions);
     }
 
-    public Account GetAccountByAccountNumber(int accountNumber)
-    {
-        string sqlCommand = $"select * from {TableName} where AccountNumber = @AccountNumber;";
-
-        var parameters = new Dictionary<string, object?>();
-        parameters.Add("AccountNumber", accountNumber);
-        var accountData = SqlConnection.GetDataTable(sqlCommand, parameters)[0];
-        return CreateAccountFromDataRow(accountData);
-    }
-
-    public List<Account> GetAccountsByCustomerID(int customerId)
+    public List<Account> GetById(int CustomerID)
     {
         string sqlCommand = $"select * from {TableName} where CustomerID = @CustomerID;";
 
         var parameters = new Dictionary<string, object?>();
-        parameters.Add("CustomerID", customerId);
-        return SqlConnection.GetDataTable(sqlCommand, parameters)
-            .Select(CreateAccountFromDataRow)
-            .ToList();
+        parameters.Add("CustomerID", CustomerID);
+        var accountData = SqlConnection.GetDataTable(sqlCommand, parameters);
+        var accounts = new List<Account>();
+        foreach (var row in accountData)
+        {
+            accounts.Add(new Account(row.Field<int>("AccountNumber"),
+                row.Field<AccountType>("AccountType"),
+                row.Field<int>("CustomerID"),
+                row.Field<decimal>("Balance")));
+        }
+
+        return accounts;
     }
 
     private decimal CalculateBalance(DTOs.TransactionDTO[] transactions)
     {
         return transactions.Sum(transaction => transaction.Amount);
-    }
-
-    private Account CreateAccountFromDataRow(DataRow accountData)
-    {
-        return new Account(
-            accountData.Field<int>("AccountNumber"),
-            accountData.Field<AccountType>("AccountType"),
-            accountData.Field<int>("CustomerID"),
-            accountData.Field<decimal>("Balance")
-        );
     }
 }

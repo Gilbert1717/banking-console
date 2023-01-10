@@ -5,6 +5,9 @@ namespace s3665887_a1.Services;
 
 public static class Menu
 {
+    private static Account? _account = null;
+    private static Customer? _customer = null;
+
     private static string menuString = """
     [1] Deposit
     [2] Withdraw
@@ -16,34 +19,39 @@ public static class Menu
     Enter an option: 
     """;
 
-    private static MenuService menuService = new MenuService();
+    private static MenuService menuService = new MenuService(
+        new CustomerSqlRepository(),
+        new LoginSqlRepository(),
+        new AccountSqlRepository(),
+        new TransactionSqlRepository()
+    );
+
 
     public static void useMenu()
     {
-        Customer? customer = null;
         string? menuSelect = null;
         do
         {
-            if (customer == null)
+            if (_customer == null)
             {
-                customer = loginMenu();
+                loginMenu();
             }
 
             else
             {
-                displayMenu(customer);
+                displayMenu();
                 menuSelect = Console.ReadLine();
-                customer = menuSwitch(menuSelect, customer);
+                menuSwitch(menuSelect);
             }
         } while (menuSelect != "6");
     }
 
-    private static Customer? menuSwitch(string? s, Customer customer)
+    private static void menuSwitch(string? s)
     {
         switch (s)
         {
             case "1":
-                deposit(customer);
+                deposit();
                 break;
             case "2":
                 withdraw();
@@ -57,18 +65,18 @@ public static class Menu
             case "5":
                 Console.Clear();
                 Console.WriteLine("Successfully Logout");
-                return null;
+                _customer = null;
+                break;
             case "6":
                 Console.WriteLine("Thanks for using the system");
-                return null;
+                _customer = null;
+                break;
             default:
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nInvalid input\n");
                 Console.ResetColor();
                 break;
         }
-
-        return customer;
     }
 
     /**
@@ -99,26 +107,26 @@ public static class Menu
         return pass;
     }
 
-    public static Customer? loginMenu()
+    public static void loginMenu()
     {
         Console.Write("Enter Login ID: ");
         string userName = Console.ReadLine();
         Console.Write("Enter Password: ");
         string userPassword = PasswordMasking();
-        return menuService.LoginCustomer(userName, userPassword);
+        _customer = menuService.LoginCustomer(userName, userPassword);
     }
 
-    public static void displayMenu(Customer customer)
+    public static void displayMenu()
     {
-        Console.WriteLine($"---{customer.Name}---");
+        PrintTitle();
         Console.Write(menuString);
     }
 
-    public static Dictionary<string, Account> selectAccountMenu(Customer customer)
+    public static Dictionary<string, Account> selectAccountMenu()
     {
-        Console.WriteLine($"---{customer.Name}---");
+        PrintTitle();
         Console.WriteLine("Please select an Account");
-        var accounts = menuService.getAccountList(customer);
+        var accounts = menuService.getAccountList(_customer);
         Dictionary<string, Account> dicAccounts = new Dictionary<string, Account>();
         foreach (var account in accounts)
         {
@@ -145,26 +153,40 @@ public static class Menu
         return dicAccounts;
     }
 
-    public static Account? selectAccount(Customer customer)
+    private static void PrintTitle()
     {
-        var dicAccounts = selectAccountMenu(customer);
+        Console.WriteLine($"---{_customer.Name}---");
+    }
+
+    public static void selectAccount()
+    {
+        var dicAccounts = selectAccountMenu();
         string accountSelection = Console.ReadLine().ToUpper();
+        PrintTitle();
         switch (accountSelection)
         {
             case "C":
-                return dicAccounts["C"];
+                _account = dicAccounts["C"];
+                break;
             case "S":
-                return dicAccounts["S"];
+                _account = dicAccounts["S"];
+                break;
             default:
                 Console.WriteLine("Invalid input");
-                return null;
+                _account = null;
+                break;
         }
     }
 
-    public static void deposit(Customer customer)
+    public static void depositMenu()
     {
-        Console.WriteLine($"---{customer.Name}---");
+        PrintTitle();
         Console.WriteLine("deposit");
+    }
+
+    public static void deposit()
+    {
+        selectAccount();
     }
 
     public static void withdraw()
