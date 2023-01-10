@@ -12,15 +12,15 @@ What this application do...
 ### Application Structure
 
     .
-    ├── DTOs                    # Objects transferring data from server and database 
-    ├── Repositories            # Classes communicating with the database           
-    │   ├── Menu.cs             # 
-    │   ├── faq.md              # 
-    │   ├── misc.md             # 
-    │   ├── usage.md            # 
-    │   └── ...   
-    ├── Services                
-    └── Trello                  # Trello board screenshots
+    ├── /Models                          # Business objects and DTOs
+    ├── /Repositories                    # Database communication
+    │   ├── /SqlRepositories             # SQL implementation of the respective repository
+    │   ├── IAccountRepository.cs        # Interface for AccountRepository 
+    │   ├── ICustomerRepository.cs       # Interface for CustomerRepository 
+    │   ├── ILoginRepository.cs          # Interface for LoginRepository 
+    │   └── ITransactionRepository.cs    # Interface for TransactionRepository
+    ├── /Services                        # Feature implementation
+    └── /Trello                          # Trello board screenshots
 
 ### Answers for Part 4: Design and Implementation [7 marks]
 
@@ -36,7 +36,9 @@ Injection design pattern. The remaining design pattern is up to you.
 > -  Where  in  the  code,  i.e.,  which  file(s)  and  code  within  those  file(s)  that  are implementing the design patterns.
 > -  Include any other points you feel are important. 
  
-answer for f)
+#### Dependency Injection
+
+#### DTOs
 
 > g) [1 mark] Implement and use a class library in your project. You must justify its use and
 provide an explanation in the readme file.  
@@ -54,7 +56,7 @@ this keyword.
 The "required" keyword has been added to 2 properties in `Login.cs`, namely, `LoginID` and `PasswordHash`.
 
 This keyword ensures non-null values are always provided for essential fields when initializing the object. In this case,
-a `Login` object will always have a valid `LoginID` and `PasswordHash` to make sure the authentication process is valid.
+a `Login` object will always have valid `LoginID` and `PasswordHash` to make sure the authentication process is valid.
 
 > i)  [2  marks]  Use  C#’s  asynchronous  keywords  async  and  await  in  your  implementation.
 The readme file should include:
