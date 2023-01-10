@@ -16,6 +16,8 @@ public static class Menu
     Enter an option: 
     """;
 
+    private static MenuService menuService = new MenuService();
+
     public static void useMenu()
     {
         Customer? customer = null;
@@ -41,7 +43,7 @@ public static class Menu
         switch (s)
         {
             case "1":
-                deposit();
+                deposit(customer);
                 break;
             case "2":
                 withdraw();
@@ -103,8 +105,7 @@ public static class Menu
         string userName = Console.ReadLine();
         Console.Write("Enter Password: ");
         string userPassword = PasswordMasking();
-        LoginService loginService = new LoginService(new LoginSqlRepository());
-        return loginService.AuthPassword(userName, userPassword);
+        return menuService.LoginCustomer(userName, userPassword);
     }
 
     public static void displayMenu(Customer customer)
@@ -113,9 +114,56 @@ public static class Menu
         Console.Write(menuString);
     }
 
-
-    public static void deposit()
+    public static Dictionary<string, Account> selectAccountMenu(Customer customer)
     {
+        Console.WriteLine($"---{customer.Name}---");
+        Console.WriteLine("Please select an Account");
+        var accounts = menuService.getAccountList(customer);
+        Dictionary<string, Account> dicAccounts = new Dictionary<string, Account>();
+        foreach (var account in accounts)
+        {
+            Console.Write("i");
+            if (account.AccountType == AccountType.S)
+            {
+                Console.WriteLine("[S]avings Account");
+                dicAccounts.Add("S", account);
+            }
+
+            else if (account.AccountType == AccountType.C)
+            {
+                Console.WriteLine("[C]hecking Account");
+                dicAccounts.Add("C", account);
+            }
+
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("DataBase Error, please contact customer service");
+            }
+        }
+
+        return dicAccounts;
+    }
+
+    public static Account? selectAccount(Customer customer)
+    {
+        var dicAccounts = selectAccountMenu(customer);
+        string accountSelection = Console.ReadLine().ToUpper();
+        switch (accountSelection)
+        {
+            case "C":
+                return dicAccounts["C"];
+            case "S":
+                return dicAccounts["S"];
+            default:
+                Console.WriteLine("Invalid input");
+                return null;
+        }
+    }
+
+    public static void deposit(Customer customer)
+    {
+        Console.WriteLine($"---{customer.Name}---");
         Console.WriteLine("deposit");
     }
 

@@ -31,7 +31,7 @@ public class Transaction
         TransactionTimeUtc = transactionTimeUtc;
     }
     
-    public Transaction(int transactionId, decimal amount,TransactionType transactionType, int accountNumber, string? destinationAccountNumber, string? comment, DateTime transactionTimeUtc)
+    public Transaction(int transactionId, TransactionType transactionType, int accountNumber, string? destinationAccountNumber, decimal amount, string? comment, DateTime transactionTimeUtc)
     {
         TransactionID = transactionId;
         Amount = amount;
