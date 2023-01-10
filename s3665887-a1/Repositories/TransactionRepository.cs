@@ -1,6 +1,5 @@
-using System.Transactions;
+using Database;
 using s3665887_a1.Models;
-using Transaction = s3665887_a1.Models.Transaction;
 
 namespace s3665887_a1.Repositories;
 
@@ -11,7 +10,6 @@ public class TransactionRepository
     public void Save(Transaction transaction)
     {
         var parameters = new Dictionary<string, object?>();
-        // TODO: need to get unknown values from somewhere
         parameters.Add("TransactionType", transaction.TransactionType.ToString());
         parameters.Add("AccountNumber", transaction.AccountNumber);
         parameters.Add("DestinationAccountNumber", transaction.DestinationAccountNumber);
@@ -19,7 +17,7 @@ public class TransactionRepository
         parameters.Add("Comment", transaction.Comment);
         parameters.Add("TransactionTimeUtc", transaction.TransactionTimeUtc);
 
-        DatabaseConnection.InsertData(TableName, parameters);
+        SqlConnection.InsertData(TableName, parameters);
     }
 
     // public Transaction GetTransaction(Account account)

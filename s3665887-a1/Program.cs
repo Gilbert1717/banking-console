@@ -1,5 +1,4 @@
-﻿using s3665887_a1.Models;
-using s3665887_a1.Services;
+﻿using s3665887_a1.Services;
 
 class Program
 {

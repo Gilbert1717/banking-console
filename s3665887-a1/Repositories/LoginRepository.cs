@@ -1,4 +1,5 @@
 using System.Data;
+using Database;
 using s3665887_a1.Models;
 
 namespace s3665887_a1.Repositories;
@@ -10,12 +11,11 @@ public class LoginRepository
     public void InsertToDB(Login login)
     {
         var parameters = new Dictionary<string, object?>();
-        // TODO: need to get customerID from somewhere
         parameters.Add("CustomerID", login.CustomerID);
         parameters.Add("LoginID", login.LoginID);
         parameters.Add("PasswordHash", login.PasswordHash);
 
-        DatabaseConnection.InsertData(TableName, parameters);
+        SqlConnection.InsertData(TableName, parameters);
     }
 
     public void Update(Login login)
@@ -26,7 +26,7 @@ public class LoginRepository
         var conditions = new Dictionary<string, object?>();
         conditions.Add("LoginID", login.LoginID);
 
-        DatabaseConnection.UpdateData(TableName, parameters, conditions);
+        SqlConnection.UpdateData(TableName, parameters, conditions);
     }
 
     public Login? GetById(string loginID)
@@ -34,7 +34,7 @@ public class LoginRepository
         string sqlCommand = $"select * from {TableName} where LoginID = @loginID;";
         var parameters = new Dictionary<string, object?>();
         parameters.Add("LoginID", loginID);
-        var loginDatas = DatabaseConnection.GetDataTable(sqlCommand, parameters);
+        var loginDatas = SqlConnection.GetDataTable(sqlCommand, parameters);
         if (loginDatas.Length == 0)
         {
             return null;
@@ -46,7 +46,6 @@ public class LoginRepository
             LoginID = loginData.Field<string>("LoginID"),
             CustomerID = loginData.Field<int>("CustomerID"),
             PasswordHash = loginData.Field<string>("PasswordHash")
-            
         };
     }
 }

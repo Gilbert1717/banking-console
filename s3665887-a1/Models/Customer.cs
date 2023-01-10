@@ -1,5 +1,3 @@
-using s3665887_a1.Repositories;
-
 namespace s3665887_a1.Models;
 
 public class Customer
@@ -9,7 +7,7 @@ public class Customer
     public string? Address { get; set; }
     public string? City { get; set; }
     public string? PostCode { get; set; }
-    
+
 
     public Customer(
         int customerId,
@@ -17,7 +15,7 @@ public class Customer
         string? address,
         string? city,
         string? postCode)
-        
+
     {
         CustomerID = customerId;
         Name = name;
@@ -25,6 +23,4 @@ public class Customer
         City = city;
         PostCode = postCode;
     }
-    
-    
 }

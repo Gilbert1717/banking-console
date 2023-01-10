@@ -67,6 +67,7 @@ public static class Menu
 
         return customer;
     }
+
     /**
      * Adapted from https://stackoverflow.com/questions/3404421/password-masking-console-application
      */
@@ -90,10 +91,11 @@ public static class Menu
                 pass += keyInfo.KeyChar;
             }
         } while (key != ConsoleKey.Enter);
+
         Console.WriteLine();
         return pass;
     }
-    
+
     public static Customer? loginMenu()
     {
         Console.Write("Enter Login ID: ");
@@ -101,15 +103,15 @@ public static class Menu
         Console.Write("Enter Password: ");
         string userPassword = PasswordMasking();
         LoginService loginService = new LoginService();
-        return loginService.authPassword(userName,userPassword);
+        return loginService.AuthPassword(userName, userPassword);
     }
 
     public static void displayMenu(Customer customer)
     {
         Console.WriteLine($"---{customer.Name}---");
         Console.Write(menuString);
-    } 
-    
+    }
+
 
     public static void deposit()
     {
