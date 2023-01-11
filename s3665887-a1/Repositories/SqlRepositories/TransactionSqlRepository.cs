@@ -34,7 +34,7 @@ public class TransactionSqlRepository : ITransactionRepository
             Transactions.Add(new Transaction(row.Field<int>("TransactionID"),
                 (TransactionType)Enum.Parse(typeof(TransactionType), row.Field<string>("TransactionType")),
                 row.Field<int>("AccountNumber"),
-                row.Field<string?>("DestinationAccountNumber"),
+                row.Field<int?>("DestinationAccountNumber"),
                 row.Field<decimal>("Amount"),
                 row.Field<string>("Comment"),
                 row.Field<DateTime>("TransactionTimeUtc")));
