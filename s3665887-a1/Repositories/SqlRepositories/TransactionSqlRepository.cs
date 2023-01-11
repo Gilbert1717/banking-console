@@ -1,3 +1,4 @@
+using System.Data;
 using Database;
 using s3665887_a1.Models;
 
@@ -20,10 +21,25 @@ public class TransactionSqlRepository : ITransactionRepository
         SqlConnection.InsertData(TableName, parameters);
     }
 
-    // public Transaction GetTransaction(Account account)
-    // {
-    //     // TODO: to be implemented
-    //     
-    //     return new Transaction();
-    // }
+    public List<Transaction> GetById(int accountNumber)
+    {
+        string sqlCommand = $"select * from {TableName} where AccountNumber = @AccountNumber;";
+
+        var parameters = new Dictionary<string, object?>();
+        parameters.Add("AccountNumber", accountNumber);
+        var accountData = SqlConnection.GetDataTable(sqlCommand, parameters);
+        var Transactions = new List<Transaction>();
+        foreach (var row in accountData)
+        {
+            Transactions.Add(new Transaction(row.Field<int>("TransactionID"),
+                (TransactionType)Enum.Parse(typeof(TransactionType), row.Field<string>("TransactionType")),
+                row.Field<int>("AccountNumber"),
+                row.Field<string?>("DestinationAccountNumber"),
+                row.Field<decimal>("Amount"),
+                row.Field<string>("Comment"),
+                row.Field<DateTime>("TransactionTimeUtc")));
+        }
+
+        return Transactions;
+    }
 }

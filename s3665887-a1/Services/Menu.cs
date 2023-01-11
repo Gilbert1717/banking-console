@@ -1,3 +1,4 @@
+using Microsoft.IdentityModel.Tokens;
 using s3665887_a1.Models;
 using s3665887_a1.Repositories.SqlRepositories;
 
@@ -5,6 +6,10 @@ namespace s3665887_a1.Services;
 
 public static class Menu
 {
+    private static Account? _account = null;
+    private static Customer? _customer = null;
+    
+
     private static string menuString = """
     [1] Deposit
     [2] Withdraw
@@ -16,27 +21,38 @@ public static class Menu
     Enter an option: 
     """;
 
+    private static MenuService menuService = new MenuService(
+        new CustomerSqlRepository(),
+        new LoginSqlRepository(),
+        new AccountSqlRepository(),
+        new TransactionSqlRepository()
+    );
+    
+    private static void PrintTitle()
+    {
+        Console.WriteLine($"---{_customer.Name}---");
+    }
+
     public static void useMenu()
     {
-        Customer? customer = null;
         string? menuSelect = null;
         do
         {
-            if (customer == null)
+            if (_customer == null)
             {
-                customer = loginMenu();
+                loginMenu();
             }
 
             else
             {
-                displayMenu(customer);
+                displayMenu();
                 menuSelect = Console.ReadLine();
-                customer = menuSwitch(menuSelect, customer);
+                menuSwitch(menuSelect);
             }
         } while (menuSelect != "6");
     }
 
-    private static Customer? menuSwitch(string? s, Customer customer)
+    private static void menuSwitch(string? s)
     {
         switch (s)
         {
@@ -55,18 +71,18 @@ public static class Menu
             case "5":
                 Console.Clear();
                 Console.WriteLine("Successfully Logout");
-                return null;
+                _customer = null;
+                break;
             case "6":
                 Console.WriteLine("Thanks for using the system");
-                return null;
+                _customer = null;
+                break;
             default:
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nInvalid input\n");
                 Console.ResetColor();
                 break;
         }
-
-        return customer;
     }
 
     /**
@@ -97,26 +113,107 @@ public static class Menu
         return pass;
     }
 
-    public static Customer? loginMenu()
+    public static void loginMenu()
     {
         Console.Write("Enter Login ID: ");
         string userName = Console.ReadLine();
         Console.Write("Enter Password: ");
         string userPassword = PasswordMasking();
-        LoginService loginService = new LoginService(new LoginSqlRepository());
-        return loginService.AuthPassword(userName, userPassword);
+        _customer = menuService.LoginCustomer(userName, userPassword);
     }
 
-    public static void displayMenu(Customer customer)
+    public static void displayMenu()
     {
-        Console.WriteLine($"---{customer.Name}---");
+        PrintTitle();
         Console.Write(menuString);
     }
 
+    public static Dictionary<AccountType, Account> selectAccountMenu()
+    {
+        PrintTitle();
+        var accounts = menuService.getAccountList(_customer);
+        Dictionary<AccountType, Account> dicAccounts = new Dictionary<AccountType, Account>();
+        foreach (var account in accounts)
+        {
+            if (account.AccountType == AccountType.S)
+            {
+                Console.WriteLine("[S] Savings Account");
+                dicAccounts.Add(account.AccountType, account);
+            }
+            else if (account.AccountType == AccountType.C)
+            {
+                Console.WriteLine("[C] Checking Account");
+                dicAccounts.Add(account.AccountType, account);
+            }
+
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("DataBase Error, please contact customer service");
+                Environment.Exit(0);
+            }
+            
+        }
+        Console.WriteLine("Please select an account: ");
+        return dicAccounts;
+    }
+
+    
+
+    public static void selectAccount()
+    {
+        do
+        {
+            var dicAccounts = selectAccountMenu();
+            string accountSelection = Console.ReadLine().ToUpper();
+            switch (accountSelection)
+            {
+                case "C":
+                    _account = dicAccounts[AccountType.C];
+                    break;
+                case "S":
+                    _account = dicAccounts[AccountType.S];
+                    break;
+                default:
+                    Console.WriteLine("Invalid input");
+                    _account = null;
+                    break;
+            }
+        } while (_account == null);
+    }
+
+    public static void depositAmountMenu()
+    {
+        decimal? transactionAmount;
+        do
+        {
+            PrintTitle();
+            Console.WriteLine("Please input the amount(maximum 2 digits after decimal): ");
+            string amount = Console.ReadLine();
+            transactionAmount = menuService.DepositAmountValidation(amount);
+        } while (transactionAmount == null);
+        Console.WriteLine("Please leave a comment: ");
+        string comment = Console.ReadLine();
+
+        Transaction transaction = new Transaction
+        {
+            TransactionType = TransactionType.D,
+            AccountNumber = _account.AccountNumber,
+            Comment = comment,
+            Amount = (decimal)transactionAmount,
+            TransactionTimeUtc = DateTime.Now
+        };
+        _account.updateBalance(_account.Balance + transaction.Amount);
+        menuService.DepositMoney(transaction,_account);
+    }
+    
+
+    
 
     public static void deposit()
     {
-        Console.WriteLine("deposit");
+        selectAccount();
+        depositAmountMenu();
     }
 
     public static void withdraw()
