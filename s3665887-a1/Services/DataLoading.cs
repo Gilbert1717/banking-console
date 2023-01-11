@@ -67,7 +67,12 @@ public class DataLoading
 
     private static Login LoginCovert(DTOs.CustomerDTO customer, DTOs.LoginDTO login)
     {
-        return new Login(login.LoginID, customer.CustomerID, login.PasswordHash);
+        return new Login
+        {
+            LoginID = login.LoginID,
+            PasswordHash = login.PasswordHash,
+            CustomerID = customer.CustomerID
+        };
     }
 
     private static Transaction TransactionCovert(DTOs.AccountDTO account,
