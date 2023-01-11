@@ -1,4 +1,5 @@
-﻿using s3665887_a1.Repositories.SqlRepositories;
+﻿using s3665887_a1.IOs;
+using s3665887_a1.Repositories.SqlRepositories;
 using s3665887_a1.Services;
 
 namespace s3665887_a1;
@@ -14,8 +15,8 @@ class Program
             new TransactionSqlRepository()
         );
         dataLoading.Preloading();
-        
-        Menu.useMenu();
-        
+
+        MenuController menuController = new MenuController();
+        menuController.UseMenu();
     }
 }

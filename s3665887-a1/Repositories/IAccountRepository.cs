@@ -9,4 +9,6 @@ public interface IAccountRepository
     void Update(Account account);
 
     List<Account> GetById(int CustomerID);
+
+    Account GetByAccountNumber(int accountNumber);
 }

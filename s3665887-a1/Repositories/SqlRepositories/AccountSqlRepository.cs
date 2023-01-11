@@ -37,16 +37,28 @@ public class AccountSqlRepository : IAccountRepository
         var parameters = new Dictionary<string, object?>();
         parameters.Add("CustomerID", CustomerID);
         var accountData = SqlConnection.GetDataTable(sqlCommand, parameters);
-        var accounts = new List<Account>();
-        foreach (var row in accountData)
-        {
-            accounts.Add(new Account(row.Field<int>("AccountNumber"),
-                (AccountType)Enum.Parse(typeof(AccountType), row.Field<string>("AccountType")),
-                row.Field<int>("CustomerID"),
-                row.Field<decimal>("Balance")));
-        }
 
-        return accounts;
+        return accountData.Select(CreateAccount).ToList();
+    }
+
+    public Account GetByAccountNumber(int accountNumber)
+    {
+        string sqlCommand = $"select * from {TableName} where AccountNumber = @AccountNumber;";
+
+        var parameters = new Dictionary<string, object?>();
+        parameters.Add("AccountNumber", accountNumber);
+        var accountData = SqlConnection.GetDataTable(sqlCommand, parameters);
+        if (accountData.Length == 0)
+            return null;
+        return CreateAccount(accountData[0]);
+    }
+
+    private Account CreateAccount(DataRow accountData)
+    {
+        return new Account(accountData.Field<int>("AccountNumber"),
+            (AccountType)Enum.Parse(typeof(AccountType), accountData.Field<string>("AccountType")),
+            accountData.Field<int>("CustomerID"),
+            accountData.Field<decimal>("Balance"));
     }
 
     private decimal CalculateBalance(DTOs.TransactionDTO[] transactions)
