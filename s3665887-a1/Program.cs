@@ -16,5 +16,6 @@ class Program
         dataLoading.Preloading();
         
         Menu.useMenu();
+        
     }
 }

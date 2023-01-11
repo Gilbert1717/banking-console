@@ -128,28 +128,31 @@ public static class Menu
         Console.Write(menuString);
     }
 
-    public static Dictionary<string, Account> selectAccountMenu()
+    public static Dictionary<AccountType, Account> selectAccountMenu()
     {
         PrintTitle();
         var accounts = menuService.getAccountList(_customer);
-        Dictionary<string, Account> dicAccounts = new Dictionary<string, Account>();
+        Dictionary<AccountType, Account> dicAccounts = new Dictionary<AccountType, Account>();
         foreach (var account in accounts)
         {
-            if (account.AccountType == "S") 
+            if (account.AccountType == AccountType.S)
             {
-                Console.WriteLine("[S]avings Account");
+                Console.WriteLine("[S] Savings Account");
+                dicAccounts.Add(account.AccountType, account);
             }
-            else if (account.AccountType == "C")
+            else if (account.AccountType == AccountType.C)
             {
-                Console.WriteLine("[C]hecking Account");
+                Console.WriteLine("[C] Checking Account");
+                dicAccounts.Add(account.AccountType, account);
             }
 
             else
             {
                 Console.Clear();
                 Console.WriteLine("DataBase Error, please contact customer service");
+                Environment.Exit(0);
             }
-            dicAccounts.Add(account.AccountType, account);
+            
         }
         Console.WriteLine("Please select an account: ");
         return dicAccounts;
@@ -159,33 +162,49 @@ public static class Menu
 
     public static void selectAccount()
     {
-        var dicAccounts = selectAccountMenu();
-        string accountSelection = Console.ReadLine().ToUpper();
-        switch (accountSelection)
+        do
         {
-            case "C":
-            case "S":
-                _account = dicAccounts[accountSelection];
-                break;
-            default:
-                Console.WriteLine("Invalid input");
-                _account = null;
-                break;
-        }
+            var dicAccounts = selectAccountMenu();
+            string accountSelection = Console.ReadLine().ToUpper();
+            switch (accountSelection)
+            {
+                case "C":
+                    _account = dicAccounts[AccountType.C];
+                    break;
+                case "S":
+                    _account = dicAccounts[AccountType.S];
+                    break;
+                default:
+                    Console.WriteLine("Invalid input");
+                    _account = null;
+                    break;
+            }
+        } while (_account == null);
     }
 
     public static void depositAmountMenu()
     {
-        Transaction? transaction;
+        decimal? transactionAmount;
         do
         {
             PrintTitle();
-            Console.WriteLine("Please input the amount: ");
+            Console.WriteLine("Please input the amount(maximum 2 digits after decimal): ");
             string amount = Console.ReadLine();
-            transaction = menuService.DepositAmountValidation(amount, _account);
-        } while (transaction == null);
+            transactionAmount = menuService.DepositAmountValidation(amount);
+        } while (transactionAmount == null);
+        Console.WriteLine("Please leave a comment: ");
+        string comment = Console.ReadLine();
 
-        menuService.SaveTransaction(transaction);
+        Transaction transaction = new Transaction
+        {
+            TransactionType = TransactionType.D,
+            AccountNumber = _account.AccountNumber,
+            Comment = comment,
+            Amount = (decimal)transactionAmount,
+            TransactionTimeUtc = DateTime.Now
+        };
+        _account.updateBalance(_account.Balance + transaction.Amount);
+        menuService.DepositMoney(transaction,_account);
     }
     
 

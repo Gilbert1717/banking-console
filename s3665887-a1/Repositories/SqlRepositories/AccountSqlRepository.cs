@@ -25,7 +25,7 @@ public class AccountSqlRepository : IAccountRepository
         parameters.Add("Balance", account.Balance);
 
         var conditions = new Dictionary<string, object?>();
-        parameters.Add("AccountNumber", account.AccountNumber.ToString());
+        conditions.Add("AccountNumber", account.AccountNumber.ToString());
 
         SqlConnection.UpdateData(TableName, parameters, conditions);
     }
@@ -41,7 +41,7 @@ public class AccountSqlRepository : IAccountRepository
         foreach (var row in accountData)
         {
             accounts.Add(new Account(row.Field<int>("AccountNumber"),
-                row.Field<string>("AccountType"),
+                (AccountType)Enum.Parse(typeof(AccountType), row.Field<string>("AccountType")),
                 row.Field<int>("CustomerID"),
                 row.Field<decimal>("Balance")));
         }

@@ -55,6 +55,7 @@ public static class SqlConnection
         // Combine two dictionaries as both are needed for SQL parameters
         var sqlParameters = valueParameters.Union(conditions).ToDictionary(k => k.Key, v => v.Value);
         var command = GetCommandWithParameters(sqlCommand, sqlParameters, connection);
+        Console.WriteLine(command.CommandText);
 
         command.ExecuteNonQuery();
     }

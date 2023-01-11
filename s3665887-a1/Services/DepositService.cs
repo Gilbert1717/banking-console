@@ -13,24 +13,17 @@ public class DepositService
     {
         _transactionRepository = transactionRepository;
     }
-    public Transaction? DepositAmountValidation(string amount, Account _account)
+    public decimal? DepositAmountValidation(string amount)
     {
-        if (decimal.TryParse(amount, out decimal validAmount))
-        {
-            return new Transaction
-            {
-                TransactionType = TransactionType.D,
-                AccountNumber = _account.AccountNumber,
-                Amount = validAmount,
-                TransactionTimeUtc = DateTime.Now
-            };
-        }
-        else
-        {
-            Console.WriteLine("Invalid Input");
-            return null;
-        }
+        if (decimal.TryParse(amount, out decimal validAmount) && decimal.Round(validAmount, 2) == validAmount)
+            return validAmount;
+        
+        Console.WriteLine("Invalid Input");
+        return null;
+        
     }
+    
+   
 
     public void SaveTransaction(Transaction transaction)
     {

@@ -37,19 +37,32 @@ public class MenuService
         return _transactionRepository.GetById(account.AccountNumber);
     }
 
-    public Customer? LoginCustomer(string userName, string userPassword)
+    public Customer LoginCustomer(string userName, string userPassword)
     {
         return _loginService.AuthPassword(userName,userPassword);
     }
 
-    public Transaction? DepositAmountValidation(string amount, Account _account)
+    public decimal? DepositAmountValidation(string amount)
     {
-        return _depositService.DepositAmountValidation(amount, _account);
+        return _depositService.DepositAmountValidation(amount);
     }
 
-    public void SaveTransaction(Transaction transaction)
+    private void SaveTransaction(Transaction transaction)
     {
         _depositService.SaveTransaction(transaction);
     }
-        
+
+    private void updateAccount(Account account)
+    {
+        _accountRepository.Update(account);
+    }
+
+    public void DepositMoney(Transaction transaction, Account account)
+    {
+        SaveTransaction(transaction);
+        updateAccount(account);
+        Console.WriteLine($"Successfully deposit {string.Format("{0:C}", transaction.Amount)} to your account");
+        Console.WriteLine(new string('-', 80));
+        Console.WriteLine();
+    }
 }

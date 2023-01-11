@@ -19,13 +19,13 @@ public class Transaction
     public TransactionType TransactionType { get; init; }
     public int AccountNumber{get; init; }
     public decimal Amount { get; init; }
-    public string? DestinationAccountNumber { get; init; } = null;
-    public string? Comment { get; init; } = null;
+    public string DestinationAccountNumber { get; init; } = null;
+    public string Comment { get; init; }
     public DateTime TransactionTimeUtc { get; init; }
 
     public Transaction() {}
     
-    public Transaction(TransactionType transactionType, int accountNumber, decimal amount, string? destinationAccountNumber, string? comment, DateTime transactionTimeUtc)
+    public Transaction(TransactionType transactionType, int accountNumber, decimal amount, string destinationAccountNumber, string comment, DateTime transactionTimeUtc)
     {
         TransactionType = transactionType;
         AccountNumber = accountNumber;

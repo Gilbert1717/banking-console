@@ -32,7 +32,7 @@ public class TransactionSqlRepository : ITransactionRepository
         foreach (var row in accountData)
         {
             Transactions.Add(new Transaction(row.Field<int>("TransactionID"),
-                row.Field<TransactionType>("TransactionType"),
+                (TransactionType)Enum.Parse(typeof(TransactionType), row.Field<string>("TransactionType")),
                 row.Field<int>("AccountNumber"),
                 row.Field<string?>("DestinationAccountNumber"),
                 row.Field<decimal>("Amount"),

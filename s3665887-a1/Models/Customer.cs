@@ -4,17 +4,17 @@ public class Customer
 {
     public int CustomerID { get; }
     public string Name { get; }
-    public string? Address { get; set; }
-    public string? City { get; set; }
-    public string? PostCode { get; set; }
+    public string Address { get; set; }
+    public string City { get; set; }
+    public string PostCode { get; set; }
 
 
     public Customer(
         int customerId,
         string name,
-        string? address,
-        string? city,
-        string? postCode)
+        string address,
+        string city,
+        string postCode)
 
     {
         CustomerID = customerId;
