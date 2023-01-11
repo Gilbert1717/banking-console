@@ -5,6 +5,11 @@ Internet Banking
 - Student ID: **s3665887**
 - URL to GitHub repository: https://github.com/rmit-wdt-fs-2023/s3665887-a1
 
+### Important Notes
+
+- A updated SQL is used for the assignment and has been included in the repository 
+  -  the Amount field constraint of the Transaction table has been updated to be != 0
+
 ### About Internet Banking
 
 What this application do...
