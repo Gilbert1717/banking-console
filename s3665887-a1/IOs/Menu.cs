@@ -8,7 +8,7 @@ public class Menu
 {
     public Customer _customer { get; private set; } = null;
     public void SetCustomer(Customer customer) => _customer = customer;
-    protected Account _account { get; private set; } = null;
+    public Account _account { get; private set; } = null;
 
 
     private readonly string menuString = """
@@ -57,8 +57,14 @@ public class Menu
     protected string LeaveCommentMenu()
     {
         Console.Clear();
-        Console.WriteLine("Press Y to leave a comment: ");
-        if (Console.ReadLine().ToUpper() == "Y")
+        Console.WriteLine("Do you want to leave a comment: Y/N");
+        ConsoleKey consoleKey;
+        do
+        {
+            consoleKey = Console.ReadKey(intercept: true).Key;
+        } while (consoleKey != ConsoleKey.Y && consoleKey != ConsoleKey.N);
+
+        if (consoleKey == ConsoleKey.Y)
         {
             Console.WriteLine("Please leave a comment: ");
             return Console.ReadLine();
@@ -98,12 +104,12 @@ public class Menu
         {
             if (account.AccountType == AccountType.S)
             {
-                Console.WriteLine("[S] Savings Account");
+                Console.WriteLine($"[S] Savings Account: {account.Balance:C}");
                 dicAccounts.Add(account.AccountType, account);
             }
             else if (account.AccountType == AccountType.C)
             {
-                Console.WriteLine("[C] Checking Account");
+                Console.WriteLine($"[C] Checking Account: {account.Balance:C}");
                 dicAccounts.Add(account.AccountType, account);
             }
 

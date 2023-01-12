@@ -23,7 +23,7 @@ public class TransactionSqlRepository : ITransactionRepository
 
     public List<Transaction> GetById(int accountNumber)
     {
-        string sqlCommand = $"select * from {TableName} where AccountNumber = @AccountNumber;";
+        string sqlCommand = $"select * from {TableName} where AccountNumber = @AccountNumber order by TransactionTimeUtc DESC;";
 
         var parameters = new Dictionary<string, object?>();
         parameters.Add("AccountNumber", accountNumber);
