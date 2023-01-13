@@ -43,12 +43,27 @@ Injection design pattern. The remaining design pattern is up to you.
  
 #### Dependency Injection
 
-#### DTOs
+Using dependency injection could provide a consistent class and method structure 
+which will benefit to future migration and integration
+
+
+#### DTO
+
+DTO(Data Transfer Object) is a design pattern that can carry the data information provided by API 
+and transfer them to the Business object that can be used by the program.
+
+The advantage of using DTO is that the business objects will not need to be matched with the provided data format, 
+which will reduce the risk caused by changing them frequently. Also, using DTO design pattern could provide flexible 
+data format for system integration.
+
+The DTO classes for the JSON retrieved from the API have been instantiated in `Models.DTOs.cs`, these DTO classes are created
+following the format of the JSON and converted to the business object when loading the data in  `Services.DataLoading.cs`
+
 
 > g) [1 mark] Implement and use a class library in your project. You must justify its use and
 provide an explanation in the readme file.  
 
-answer for g)
+A database class library has been implemented. It can be used to insert, save and update data to the Azure database.
 
 > h) [1 mark] Use C#’s required keyword for a property in your implementation. The readme
 file should include:
@@ -74,3 +89,18 @@ the change to method behaviour or program interaction / execution.
 these keywords. 
 
 answer for i)
+
+- Asynchronization provides the environment that different task can be run parallelly. It will consume more computing power 
+but with multiple task run at the same time, it can reduce unnecessary waiting time which used to process different tasks.
+
+
+- Take this program as an example, when we first run the program, it will need to load data from the API. These data is only needed
+after customer input the user ID and password. If we do not implement asynchronization, customer will either waiting all the data
+has been loaded to input the user details or wait the program to load data after provide the user details. However, for customer 
+anthentication, it only requires the result after the data has been loaded, and the loading process does not affect customer input
+user details. Thus, we can use asynchronization to handle this situation. With the asynchronization system will be able to load 
+the data while customer inputting their login details, as a result, system could use this time more efficiently as well. Since
+customer authorization can only happen after data has been fully loaded, I used await keywords before authorization to make sure
+it does not happen before data loading finishing(In case customer input the details too fast or it takes too much time to load the data).
+
+- The async `Preloading()` method is written in `Services.DataLoading.cs` and it is called in `UseMenu()` in `IOs.MenuController.cs` Method.

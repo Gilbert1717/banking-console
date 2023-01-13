@@ -1,34 +1,40 @@
+using Database;
 using s3665887_a1.Repositories.SqlRepositories;
 using s3665887_a1.Services;
 
 namespace s3665887_a1.IOs;
 
-public class MenuController
+public static class MenuController
 {
-    private readonly Menu _menu = new();
-    private readonly DepositMenu _dmenu = new();
-    private readonly WithdrawMenu _wmenu = new();
-    private readonly TransferMenu _tmenu = new();
-    private readonly StatementMenu _smenu = new();
-    
-    DataLoading dataLoading = new DataLoading(
-        new CustomerSqlRepository(),
-        new LoginSqlRepository(),
-        new AccountSqlRepository(),
-        new TransactionSqlRepository()
+    private const string ConnectionString =
+        "server=rmit.australiaeast.cloudapp.azure.com;Encrypt=False;uid=s3665887_a1;pwd=abc123";
+
+    private static readonly SqlConnection SqlConnection = new(ConnectionString);
+
+    private static readonly DataLoading DataLoading = new(
+        new CustomerSqlRepository(SqlConnection),
+        new LoginSqlRepository(SqlConnection),
+        new AccountSqlRepository(SqlConnection),
+        new TransactionSqlRepository(SqlConnection)
     );
 
-    public void UseMenu()
+    private static readonly Menu _menu = new(SqlConnection);
+    private static readonly DepositMenu _dmenu = new(SqlConnection);
+    private static readonly WithdrawMenu _wmenu = new(SqlConnection);
+    private static readonly TransferMenu _tmenu = new(SqlConnection);
+    private static readonly StatementMenu _smenu = new(SqlConnection);
+
+    public static void UseMenu()
     {
-        Task task = dataLoading.Preloading();
-        Menu(task);
+        Task task = DataLoading.Preloading();
+        MainMenu(task);
     }
-    
-    public async void Menu(Task task)
+
+    private static async void MainMenu(Task task)
     {
         string? menuSelect = null;
         do
-        {   
+        {
             if (_menu._customer == null)
             {
                 _menu.LoginMenu();
@@ -44,7 +50,7 @@ public class MenuController
         } while (menuSelect != "6");
     }
 
-    private void MenuSwitch(string menuSelection)
+    private static void MenuSwitch(string menuSelection)
     {
         switch (menuSelection)
         {

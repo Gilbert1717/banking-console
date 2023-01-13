@@ -6,7 +6,13 @@ namespace s3665887_a1.Repositories.SqlRepositories;
 
 public class LoginSqlRepository : ILoginRepository
 {
+    private readonly SqlConnection _sqlConnection;
     private const string TableName = "[Login]";
+
+    public LoginSqlRepository(SqlConnection sqlConnection)
+    {
+        _sqlConnection = sqlConnection;
+    }
 
     public void InsertToDB(Login login)
     {
@@ -15,7 +21,7 @@ public class LoginSqlRepository : ILoginRepository
         parameters.Add("LoginID", login.LoginID);
         parameters.Add("PasswordHash", login.PasswordHash);
 
-        SqlConnection.InsertData(TableName, parameters);
+        _sqlConnection.InsertData(TableName, parameters);
     }
 
     public void Update(Login login)
@@ -26,7 +32,7 @@ public class LoginSqlRepository : ILoginRepository
         var conditions = new Dictionary<string, object?>();
         conditions.Add("LoginID", login.LoginID);
 
-        SqlConnection.UpdateData(TableName, parameters, conditions);
+        _sqlConnection.UpdateData(TableName, parameters, conditions);
     }
 
     public Login? GetById(string loginID)
@@ -34,7 +40,7 @@ public class LoginSqlRepository : ILoginRepository
         string sqlCommand = $"select * from {TableName} where LoginID = @loginID;";
         var parameters = new Dictionary<string, object?>();
         parameters.Add("LoginID", loginID);
-        var loginDatas = SqlConnection.GetDataTable(sqlCommand, parameters);
+        var loginDatas = _sqlConnection.GetDataTable(sqlCommand, parameters);
         if (loginDatas.Length == 0)
         {
             return null;

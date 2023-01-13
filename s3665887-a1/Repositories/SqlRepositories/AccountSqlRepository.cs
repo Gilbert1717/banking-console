@@ -6,7 +6,13 @@ namespace s3665887_a1.Repositories.SqlRepositories;
 
 public class AccountSqlRepository : IAccountRepository
 {
+    private readonly SqlConnection _sqlConnection;
     private const string TableName = "[Account]";
+
+    public AccountSqlRepository(SqlConnection sqlConnection)
+    {
+        _sqlConnection = sqlConnection;
+    }
 
     public void InsertToDB(DTOs.AccountDTO account)
     {
@@ -16,7 +22,7 @@ public class AccountSqlRepository : IAccountRepository
         parameters.Add("CustomerID", account.CustomerID);
         parameters.Add("Balance", CalculateBalance(account.Transactions));
 
-        SqlConnection.InsertData(TableName, parameters);
+        _sqlConnection.InsertData(TableName, parameters);
     }
 
     public void Update(Account account)
@@ -27,7 +33,7 @@ public class AccountSqlRepository : IAccountRepository
         var conditions = new Dictionary<string, object?>();
         conditions.Add("AccountNumber", account.AccountNumber.ToString());
 
-        SqlConnection.UpdateData(TableName, parameters, conditions);
+        _sqlConnection.UpdateData(TableName, parameters, conditions);
     }
 
     public List<Account> GetById(int CustomerID)
@@ -36,7 +42,7 @@ public class AccountSqlRepository : IAccountRepository
 
         var parameters = new Dictionary<string, object?>();
         parameters.Add("CustomerID", CustomerID);
-        var accountData = SqlConnection.GetDataTable(sqlCommand, parameters);
+        var accountData = _sqlConnection.GetDataTable(sqlCommand, parameters);
 
         return accountData.Select(CreateAccount).ToList();
     }
@@ -47,7 +53,7 @@ public class AccountSqlRepository : IAccountRepository
 
         var parameters = new Dictionary<string, object?>();
         parameters.Add("AccountNumber", accountNumber);
-        var accountData = SqlConnection.GetDataTable(sqlCommand, parameters);
+        var accountData = _sqlConnection.GetDataTable(sqlCommand, parameters);
         if (accountData.Length == 0)
             return null;
         return CreateAccount(accountData[0]);

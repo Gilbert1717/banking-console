@@ -4,17 +4,18 @@ using Connection = Microsoft.Data.SqlClient.SqlConnection;
 
 namespace Database;
 
-public static class SqlConnection
+public class SqlConnection
 {
-    private const string ConnectionString =
-        "server=rmit.australiaeast.cloudapp.azure.com;" +
-        "Encrypt=False;" +
-        "uid=s3665887_a1;" +
-        "pwd=abc123";
+    private readonly string _connectionString;
 
-    public static DataRow[] GetDataTable(string sqlCommand, Dictionary<string, object?>? sqlParameters = null)
+    public SqlConnection(string connectionString)
     {
-        using var connection = new Connection(ConnectionString);
+        _connectionString = connectionString;
+    }
+
+    public DataRow[] GetDataTable(string sqlCommand, Dictionary<string, object?>? sqlParameters = null)
+    {
+        using var connection = new Connection(_connectionString);
         connection.Open();
 
         var command = GetCommandWithParameters(sqlCommand, sqlParameters, connection);
@@ -25,9 +26,9 @@ public static class SqlConnection
         return table.Select();
     }
 
-    public static void InsertData(string table, Dictionary<string, object?> sqlParameters)
+    public void InsertData(string table, Dictionary<string, object?> sqlParameters)
     {
-        using var connection = new Connection(ConnectionString);
+        using var connection = new Connection(_connectionString);
         connection.Open();
 
         string sqlCommand = $"INSERT INTO {table} ({string.Join(", ", sqlParameters.Keys)}) " +
@@ -38,12 +39,12 @@ public static class SqlConnection
         command.ExecuteNonQuery();
     }
 
-    public static void UpdateData(
+    public void UpdateData(
         string table,
         Dictionary<string, object?> valueParameters,
         Dictionary<string, object?> conditions)
     {
-        using var connection = new Connection(ConnectionString);
+        using var connection = new Connection(_connectionString);
         connection.Open();
 
         var value = valueParameters.Keys.Select(key => $"{key} = @{key}");
@@ -59,7 +60,7 @@ public static class SqlConnection
         command.ExecuteNonQuery();
     }
 
-    private static SqlCommand GetCommandWithParameters(
+    private SqlCommand GetCommandWithParameters(
         string sqlCommand,
         Dictionary<string, object?>? sqlParameters,
         Connection connection)

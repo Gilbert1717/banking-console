@@ -1,3 +1,4 @@
+using Database;
 using s3665887_a1.Models;
 
 namespace s3665887_a1.IOs;
@@ -10,13 +11,17 @@ public class StatementMenu : Menu
     string row = new string('-', 165);
     private List<Transaction> transactions { get; set; }
 
+    public StatementMenu(SqlConnection sqlConnection) : base(sqlConnection)
+    {
+    }
+
     public void MyStatement()
     {
         SelectAccount();
         DisplayMenu();
     }
 
-    private void setTransactions()
+    private void SetTransactions()
     {
         transactions = MenuService.GetTransactionHistory(_account);
     }
@@ -31,16 +36,16 @@ public class StatementMenu : Menu
     {
         string headerFormat = "{0,-80} {1,80}";
         string balance = $"Account balance: {_account.Balance:C}";
-        int currentPage = startIndex/recordsPerPage + 1;
+        int currentPage = startIndex / recordsPerPage + 1;
         int totalPage = (transactions.Count + recordsPerPage - 1) / recordsPerPage;
         string pageInfo = $"Page {currentPage}/{totalPage}";
-        
+
         Console.WriteLine(headerFormat, balance, pageInfo);
     }
 
     private void DisplayStatement(int startIndex)
     {
-        setTransactions();
+        SetTransactions();
         Console.Clear();
         DisplayHeader(startIndex);
         Console.WriteLine(row);
