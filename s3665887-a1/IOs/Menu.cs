@@ -9,7 +9,7 @@ public class Menu
 {
     public Menu(SqlConnection sqlConnection)
     {
-        MenuService = new(
+        MenuService = new MenuService(
             new CustomerSqlRepository(sqlConnection),
             new LoginSqlRepository(sqlConnection),
             new AccountSqlRepository(sqlConnection),
@@ -37,7 +37,6 @@ public class Menu
 
     public void LoginMenu()
     {
-        Console.Clear();
         Console.Write("Enter Login ID: ");
         string userName = Console.ReadLine();
         Console.Write("Enter Password: ");
@@ -58,7 +57,6 @@ public class Menu
 
     protected string LeaveCommentMenu()
     {
-        Console.Clear();
         Console.WriteLine("Do you want to leave a comment: Y/N");
         ConsoleKey consoleKey;
         do
@@ -79,23 +77,22 @@ public class Menu
     {
         do
         {
-            Console.Clear();
             var dicAccounts = SelectAccountMenu();
             string accountSelection = Console.ReadLine().ToUpper();
             switch (accountSelection)
             {
                 case "C":
-                    this._account = dicAccounts[AccountType.C];
+                    _account = dicAccounts[AccountType.C];
                     break;
                 case "S":
-                    this._account = dicAccounts[AccountType.S];
+                    _account = dicAccounts[AccountType.S];
                     break;
                 default:
-                    Console.WriteLine("Invalid input");
-                    this._account = null;
+                    MenuService.PrintWarning("Invalid input");
+                    _account = null;
                     break;
             }
-        } while (this._account == null);
+        } while (_account == null);
     }
 
     private Dictionary<AccountType, Account> SelectAccountMenu()
@@ -124,7 +121,7 @@ public class Menu
             }
         }
 
-        Console.WriteLine("Please select an account: ");
+        Console.Write("Please select an account: ");
         return dicAccounts;
     }
 

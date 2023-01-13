@@ -1,12 +1,10 @@
 namespace s3665887_a1.Models;
 
-
-
 public class Account
 {
-    public int AccountNumber { get; private init; }
-    public AccountType AccountType { get; private init; } = AccountType.S;
-    public int CustomerID { get; private set; }
+    public int AccountNumber { get; }
+    public AccountType AccountType { get; } = AccountType.S;
+    public int CustomerID { get; }
     public decimal Balance { get; private set; }
 
 
@@ -18,9 +16,9 @@ public class Account
         Balance = balance;
     }
 
-    public void updateBalance(decimal balance)
+    public void UpdateBalance(decimal balance)
     {
-        this.Balance = balance;
+        Balance = balance;
     }
 }
 

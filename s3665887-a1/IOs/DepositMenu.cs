@@ -19,8 +19,7 @@ public class DepositMenu : Menu
         decimal? transactionAmount;
         do
         {
-            PrintTitle();
-            Console.WriteLine("Please input the amount(maximum 2 digits after decimal): ");
+            Console.Write("Please input the deposit amount (maximum 2 digits after decimal): ");
             string amount = Console.ReadLine();
             transactionAmount = MenuService.DepositAmountValidation(amount);
         } while (transactionAmount == null);

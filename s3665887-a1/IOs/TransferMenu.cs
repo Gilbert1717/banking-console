@@ -20,8 +20,7 @@ public class TransferMenu : Menu
         Account destinationAccount;
         do
         {
-            PrintTitle();
-            Console.WriteLine("Please input the destination account number : ");
+            Console.Write("Please input the destination account number: ");
             string destinationAccountNumber = Console.ReadLine();
             destinationAccount = AccountValidation(destinationAccountNumber, _account);
         } while (destinationAccount == null);
@@ -33,19 +32,25 @@ public class TransferMenu : Menu
     {
         if (account.AccountNumber.ToString() == input)
         {
-            Console.Clear();
-            Console.WriteLine("You can only transfer to a different account, please re-try");
+            MenuService.PrintWarning("You can only transfer to a different account, please re-try");
             return null;
         }
 
-        if (int.TryParse(input, out int destinationAccountNumber))
+        if (!int.TryParse(input, out int destinationAccountNumber))
         {
-            return MenuService.GetByAccountNumber(destinationAccountNumber);
+            MenuService.PrintWarning("Invalid account number, please re-try");
+            return null;
         }
 
-        Console.Clear();
-        Console.WriteLine("Destination account does not exist, please re-try");
-        return null;
+        var destinationAccount = MenuService.GetByAccountNumber(destinationAccountNumber);
+
+        if (destinationAccount == null)
+        {
+            MenuService.PrintWarning("Destination account does not exist, please re-try");
+            return null;
+        }
+
+        return destinationAccount;
     }
 
     private decimal? TransferAmountValidation()
@@ -54,10 +59,10 @@ public class TransferMenu : Menu
         do
         {
             PrintTitle();
-            Console.WriteLine("Please input the amount(maximum 2 digits after decimal): ");
+            Console.Write("Please input the transfer amount (maximum 2 digits after decimal): ");
             string amount = Console.ReadLine();
             transferAmount = MenuService.WithdrawAmountValidation(amount, _account);
-        } while (transferAmount == null);
+        } while (transferAmount == null && transferAmount != 0);
 
         return (decimal)transferAmount;
     }
@@ -66,8 +71,11 @@ public class TransferMenu : Menu
     {
         Account destinationAccount = SelectDestinationAccount();
         decimal transferAmount = (decimal)TransferAmountValidation();
-        string comment = LeaveCommentMenu();
 
-        MenuService.TransferMoney(comment, transferAmount, _account, destinationAccount);
+        if (transferAmount != 0)
+        {
+            string comment = LeaveCommentMenu();
+            MenuService.TransferMoney(comment, transferAmount, _account, destinationAccount);
+        }
     }
 }
