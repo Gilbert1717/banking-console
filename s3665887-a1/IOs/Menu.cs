@@ -31,6 +31,7 @@ public class Menu
 
     public void LoginMenu()
     {
+        Console.Clear();
         Console.Write("Enter Login ID: ");
         string userName = Console.ReadLine();
         Console.Write("Enter Password: ");
@@ -43,11 +44,7 @@ public class Menu
         PrintTitle();
         Console.Write(menuString);
     }
-
-    public void MyStatement()
-    {
-        Console.WriteLine("myStatement");
-    }
+    
 
     protected void PrintTitle()
     {
@@ -77,6 +74,7 @@ public class Menu
     {
         do
         {
+            Console.Clear();
             var dicAccounts = SelectAccountMenu();
             string accountSelection = Console.ReadLine().ToUpper();
             switch (accountSelection)

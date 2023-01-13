@@ -12,7 +12,7 @@ public class MenuController
     {
         string? menuSelect = null;
         do
-        {
+        {   
             if (_menu._customer == null)
             {
                 _menu.LoginMenu();
@@ -49,7 +49,6 @@ public class MenuController
                 break;
             case "5":
                 Console.Clear();
-                Console.WriteLine("Successfully Logout");
                 _menu.SetCustomer(null);
                 break;
             case "6":
