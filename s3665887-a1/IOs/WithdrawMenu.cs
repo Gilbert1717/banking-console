@@ -19,14 +19,15 @@ public class WithdrawMenu : Menu
         decimal? withdrawAmount;
         do
         {
-            PrintTitle();
-            Console.WriteLine("Please input the amount(maximum 2 digits after decimal): ");
+            Console.Write("Please input the withdrawal amount (maximum 2 digits after decimal): ");
             string amount = Console.ReadLine();
             withdrawAmount = MenuService.WithdrawAmountValidation(amount, _account);
-        } while (withdrawAmount == null);
+        } while (withdrawAmount == null && withdrawAmount != 0);
 
-        string comment = LeaveCommentMenu();
-
-        MenuService.WithdrawMoney(comment, (decimal)withdrawAmount, _account);
+        if (withdrawAmount != 0)
+        {
+            string comment = LeaveCommentMenu();
+            MenuService.WithdrawMoney(comment, (decimal)withdrawAmount, _account);
+        }
     }
 }

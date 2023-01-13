@@ -52,6 +52,8 @@ public static class MenuController
 
     private static void MenuSwitch(string menuSelection)
     {
+        Console.Clear();
+
         switch (menuSelection)
         {
             case "1":
@@ -71,7 +73,6 @@ public static class MenuController
                 _smenu.MyStatement();
                 break;
             case "5":
-                Console.Clear();
                 _menu.SetCustomer(null);
                 break;
             case "6":

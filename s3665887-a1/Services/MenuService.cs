@@ -68,9 +68,8 @@ public class MenuService
             if ((account.AccountType == AccountType.S && account.Balance - validAmount < 0) ||
                 (account.AccountType == AccountType.C && account.Balance - validAmount < 300))
             {
-                Console.WriteLine("Insufficient balance");
-                Console.WriteLine("Direct to main menu");
-                return null;
+                PrintWarning("\nInsufficient balance\nDirect to main menu\n");
+                return 0;
             }
 
             return validAmount;
@@ -175,7 +174,15 @@ public class MenuService
     private void HandleTransaction(Transaction transaction, Account account)
     {
         SaveTransaction(transaction);
-        account.updateBalance(account.Balance + transaction.Amount);
+        account.UpdateBalance(account.Balance + transaction.Amount);
         UpdateAccount(account);
+    }
+
+    public void PrintWarning(string message)
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"\n{message}\n");
+        Console.ResetColor();
     }
 }

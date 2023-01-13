@@ -15,8 +15,7 @@ public class DataLoading
         ICustomerRepository customerRepository,
         ILoginRepository loginRepository,
         IAccountRepository accountRepository,
-        ITransactionRepository transactionRepository
-    )
+        ITransactionRepository transactionRepository)
     {
         _customerRepository = customerRepository;
         _loginRepository = loginRepository;
@@ -52,7 +51,7 @@ public class DataLoading
             }
         }
     }
-    
+
     private List<DTOs.CustomerDTO> LoadDataFromServer()
     {
         const string Url = "https://coreteaching01.csit.rmit.edu.au/~e103884/wdt/services/customers/";
