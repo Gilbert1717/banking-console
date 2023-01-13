@@ -150,7 +150,7 @@ public class MenuService
             Comment = comment,
             Amount = amount,
             DestinationAccountNumber = destinationAccount?.AccountNumber,
-            TransactionTimeUtc = DateTime.Now
+            TransactionTimeUtc = DateTime.Now.ToUniversalTime()
         };
     }
 

@@ -6,12 +6,13 @@ public class MenuController
     private readonly DepositMenu _dmenu = new();
     private readonly WithdrawMenu _wmenu = new();
     private readonly TransferMenu _tmenu = new();
+    private readonly StatementMenu _smenu = new();
 
     public void UseMenu()
     {
         string? menuSelect = null;
         do
-        {
+        {   
             if (_menu._customer == null)
             {
                 _menu.LoginMenu();
@@ -43,11 +44,11 @@ public class MenuController
                 _tmenu.Transfer();
                 break;
             case "4":
-                _menu.MyStatement();
+                _smenu.SetCustomer(_menu._customer);
+                _smenu.MyStatement();
                 break;
             case "5":
                 Console.Clear();
-                Console.WriteLine("Successfully Logout");
                 _menu.SetCustomer(null);
                 break;
             case "6":
