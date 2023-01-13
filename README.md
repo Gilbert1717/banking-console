@@ -22,8 +22,7 @@ Internet Banking
     │   ├── ILoginRepository.cs          # Interface for LoginRepository 
     │   └── ITransactionRepository.cs    # Interface for TransactionRepository
     ├── /Services                        # Feature implementation
-    ├── Program.cs                       # Main method - start of the program
-    └── README.md
+    └── Program.cs                       # Main method - start of the program
 
 ### Answers for Part 4: Design and Implementation [7 marks]
 
@@ -39,7 +38,7 @@ Internet Banking
 > - Where in the code, i.e., which file(s)  and code within those file(s)  that are implementing the design patterns.
 > - Include any other points you feel are important.
 
-#### <u>Dependency Injection</u>
+#### Dependency Injection
 
 Dependency injection separates the construction and usage of an object. The "injector" takes care of constructing such
 object while classes that utilise such object can use it without knowing how to construct it. This allows the program
@@ -57,7 +56,7 @@ Repository interfaces sit in `Repositories/` while the SQL implementations are p
 Repositories are used in `Services/MenuService.cs` and `Services/DataLoading.cs`, but the dependency is injected in
 `IOs/Menu.cs` and `IOs/MenuController.cs` respectively.
 
-#### <u>DTOs</u>
+#### DTOs
 
 DTOs (Data Transfer Objects) are objects that can be used to carry data provided by API and are subsequently transfer
 into business objects that can be used by the program.
@@ -70,6 +69,7 @@ The DTO classes for the JSON retrieved from the API have been instantiated in `M
 created following the format of the JSON and converted to the business object when loading the data
 in  `Services/DataLoading.cs`
 
+---
 
 > g) [1 mark] Implement and use a class library in your project. You must justify its use and
 > provide an explanation in the readme file.
@@ -79,6 +79,8 @@ the Azure database. Since database communication is widely used. All the busines
 database. The program also needs to retrieve them from the database to implement the task and update them according to
 the changes. Thus, a SQL connection library has been built so all the methods related to database communication can be
 easily called from this library.
+
+---
 
 > h) [1 mark] Use C#’s required keyword for a property in your implementation. The readme
 > file should include:
@@ -94,6 +96,7 @@ This keyword ensures non-null values are always provided for essential fields wh
 case, a `Login` object will always have valid `LoginID` and `PasswordHash` to make sure the authentication process is
 valid.
 
+---
 
 > i)  [2  marks]  Use C#’s asynchronous keywords async and await in your implementation.
 > The readme file should include:
