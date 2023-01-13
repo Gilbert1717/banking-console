@@ -25,7 +25,7 @@ public class MenuService
         _accountRepository = accountRepository;
         _transactionRepository = transactionRepository;
 
-        _loginService = new LoginService(_loginRepository, _customerRepository);
+        _loginService = new LoginService(loginRepository, customerRepository);
     }
 
     public List<Account> GetAccountList(Customer customer)
