@@ -1,3 +1,6 @@
+using s3665887_a1.Repositories.SqlRepositories;
+using s3665887_a1.Services;
+
 namespace s3665887_a1.IOs;
 
 public class MenuController
@@ -7,8 +10,21 @@ public class MenuController
     private readonly WithdrawMenu _wmenu = new();
     private readonly TransferMenu _tmenu = new();
     private readonly StatementMenu _smenu = new();
+    
+    DataLoading dataLoading = new DataLoading(
+        new CustomerSqlRepository(),
+        new LoginSqlRepository(),
+        new AccountSqlRepository(),
+        new TransactionSqlRepository()
+    );
 
     public void UseMenu()
+    {
+        Task task = dataLoading.Preloading();
+        Menu(task);
+    }
+    
+    public async void Menu(Task task)
     {
         string? menuSelect = null;
         do
@@ -20,6 +36,7 @@ public class MenuController
 
             else
             {
+                await task;
                 _menu.DisplayMenu();
                 menuSelect = Console.ReadLine();
                 MenuSwitch(menuSelect);

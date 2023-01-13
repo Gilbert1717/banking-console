@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using s3665887_a1.Models;
 using s3665887_a1.Repositories;
 
@@ -23,7 +24,7 @@ public class DataLoading
         _transactionRepository = transactionRepository;
     }
 
-    public void Preloading()
+    public async Task Preloading()
     {
         if (_customerRepository.Any())
         {
@@ -31,8 +32,7 @@ public class DataLoading
         }
 
         //Create instances which will be used for loading data
-        JSONConvert jsonConvert = new JSONConvert();
-        List<DTOs.CustomerDTO> customers = jsonConvert.covertJSON();
+        List<DTOs.CustomerDTO> customers = LoadDataFromServer();
 
 
         //nested for loop to convert DTO to Business Obj and load them to database.
@@ -51,6 +51,18 @@ public class DataLoading
                 }
             }
         }
+    }
+    
+    private List<DTOs.CustomerDTO> LoadDataFromServer()
+    {
+        const string Url = "https://coreteaching01.csit.rmit.edu.au/~e103884/wdt/services/customers/";
+        using var client = new HttpClient();
+        var json = client.GetStringAsync(Url).Result;
+
+        return JsonConvert.DeserializeObject<List<DTOs.CustomerDTO>>(json, new JsonSerializerSettings
+        {
+            DateFormatString = "DD/MM/YYYY hh:mm:ss tt"
+        });
     }
 
     private static Login LoginCovert(DTOs.CustomerDTO customer, DTOs.LoginDTO login)
