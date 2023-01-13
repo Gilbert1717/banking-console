@@ -1,9 +1,14 @@
+using Database;
 using s3665887_a1.Models;
 
 namespace s3665887_a1.IOs;
 
 public class TransferMenu : Menu
 {
+    public TransferMenu(SqlConnection sqlConnection) : base(sqlConnection)
+    {
+    }
+
     public void Transfer()
     {
         SelectAccount();

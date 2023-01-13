@@ -6,7 +6,13 @@ namespace s3665887_a1.Repositories.SqlRepositories;
 
 public class TransactionSqlRepository : ITransactionRepository
 {
+    private readonly SqlConnection _sqlConnection;
     private const string TableName = "[Transaction]";
+
+    public TransactionSqlRepository(SqlConnection sqlConnection)
+    {
+        _sqlConnection = sqlConnection;
+    }
 
     public void Save(Transaction transaction)
     {
@@ -18,16 +24,17 @@ public class TransactionSqlRepository : ITransactionRepository
         parameters.Add("Comment", transaction.Comment);
         parameters.Add("TransactionTimeUtc", transaction.TransactionTimeUtc);
 
-        SqlConnection.InsertData(TableName, parameters);
+        _sqlConnection.InsertData(TableName, parameters);
     }
 
     public List<Transaction> GetById(int accountNumber)
     {
-        string sqlCommand = $"select * from {TableName} where AccountNumber = @AccountNumber order by TransactionTimeUtc DESC;";
+        string sqlCommand =
+            $"select * from {TableName} where AccountNumber = @AccountNumber order by TransactionTimeUtc DESC;";
 
         var parameters = new Dictionary<string, object?>();
         parameters.Add("AccountNumber", accountNumber);
-        var accountData = SqlConnection.GetDataTable(sqlCommand, parameters);
+        var accountData = _sqlConnection.GetDataTable(sqlCommand, parameters);
         var Transactions = new List<Transaction>();
         foreach (var row in accountData)
         {

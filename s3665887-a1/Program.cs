@@ -6,7 +6,6 @@ class Program
 {
     static void Main()
     {
-        MenuController menuController = new MenuController();
-        menuController.UseMenu();
+        MenuController.UseMenu();
     }
 }

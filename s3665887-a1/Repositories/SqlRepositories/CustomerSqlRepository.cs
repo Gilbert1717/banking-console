@@ -6,7 +6,13 @@ namespace s3665887_a1.Repositories.SqlRepositories;
 
 public class CustomerSqlRepository : ICustomerRepository
 {
+    private readonly SqlConnection _sqlConnection;
     private const string TableName = "[Customer]";
+
+    public CustomerSqlRepository(SqlConnection sqlConnection)
+    {
+        _sqlConnection = sqlConnection;
+    }
 
     public void InsertToDB(DTOs.CustomerDTO customer)
     {
@@ -17,7 +23,7 @@ public class CustomerSqlRepository : ICustomerRepository
         parameters.Add("City", customer.City);
         parameters.Add("PostCode", customer.PostCode);
 
-        SqlConnection.InsertData(TableName, parameters);
+        _sqlConnection.InsertData(TableName, parameters);
     }
 
     public void Update(Customer customer)
@@ -31,14 +37,14 @@ public class CustomerSqlRepository : ICustomerRepository
         var conditions = new Dictionary<string, object?>();
         conditions.Add("CustomerID", customer.CustomerID.ToString());
 
-        SqlConnection.UpdateData(TableName, parameters, conditions);
+        _sqlConnection.UpdateData(TableName, parameters, conditions);
     }
 
     //check if there is any existing customer in database
     public bool Any()
     {
         string sqlCommand = $"select count(*) as count from {TableName} ;";
-        var count = SqlConnection.GetDataTable(sqlCommand)[0];
+        var count = _sqlConnection.GetDataTable(sqlCommand)[0];
         return count.Field<int>("count") > 0;
     }
 
@@ -48,7 +54,7 @@ public class CustomerSqlRepository : ICustomerRepository
 
         var parameters = new Dictionary<string, object?>();
         parameters.Add("CustomerID", customerId);
-        var customerData = SqlConnection.GetDataTable(sqlCommand, parameters)[0];
+        var customerData = _sqlConnection.GetDataTable(sqlCommand, parameters)[0];
 
         return new Customer(
             customerData.Field<int>("CustomerID"),

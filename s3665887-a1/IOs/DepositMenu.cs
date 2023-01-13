@@ -1,7 +1,13 @@
+using Database;
+
 namespace s3665887_a1.IOs;
 
 public class DepositMenu : Menu
 {
+    public DepositMenu(SqlConnection sqlConnection) : base(sqlConnection)
+    {
+    }
+
     public void Deposit()
     {
         SelectAccount();

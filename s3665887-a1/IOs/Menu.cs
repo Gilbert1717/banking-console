@@ -1,3 +1,4 @@
+using Database;
 using s3665887_a1.Models;
 using s3665887_a1.Repositories.SqlRepositories;
 using s3665887_a1.Services;
@@ -6,6 +7,16 @@ namespace s3665887_a1.IOs;
 
 public class Menu
 {
+    public Menu(SqlConnection sqlConnection)
+    {
+        MenuService = new(
+            new CustomerSqlRepository(sqlConnection),
+            new LoginSqlRepository(sqlConnection),
+            new AccountSqlRepository(sqlConnection),
+            new TransactionSqlRepository(sqlConnection)
+        );
+    }
+
     public Customer _customer { get; private set; } = null;
     public void SetCustomer(Customer customer) => _customer = customer;
     public Account _account { get; private set; } = null;
@@ -22,12 +33,7 @@ public class Menu
     Enter an option: 
     """;
 
-    protected readonly MenuService MenuService = new MenuService(
-        new CustomerSqlRepository(),
-        new LoginSqlRepository(),
-        new AccountSqlRepository(),
-        new TransactionSqlRepository()
-    );
+    protected readonly MenuService MenuService;
 
     public void LoginMenu()
     {
@@ -44,7 +50,6 @@ public class Menu
         PrintTitle();
         Console.Write(menuString);
     }
-    
 
     protected void PrintTitle()
     {

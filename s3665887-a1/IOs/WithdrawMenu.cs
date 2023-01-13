@@ -1,7 +1,13 @@
+using Database;
+
 namespace s3665887_a1.IOs;
 
 public class WithdrawMenu : Menu
 {
+    public WithdrawMenu(SqlConnection sqlConnection) : base(sqlConnection)
+    {
+    }
+
     public void Withdraw()
     {
         SelectAccount();
